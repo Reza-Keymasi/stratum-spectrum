@@ -22,7 +22,6 @@ const AppCombobox = ({
   itemsArray,
   inputPlaceholder,
 }: AppComboboxProps) => {
-  console.log(value);
   return (
     <Combobox
       items={itemsArray}
