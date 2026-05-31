@@ -9,7 +9,6 @@ interface FormToggleGroupProps {
 
 const FormToggleGroup = ({ name, items }: FormToggleGroupProps) => {
   const { control } = useFormContext();
-  console.log(control);
 
   return (
     <Controller
