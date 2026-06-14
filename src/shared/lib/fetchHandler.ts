@@ -8,6 +8,12 @@ export class ApiError extends Error {
   }
 }
 
+let getAccessToken: () => string | null = () => null;
+
+export function configureTokenGetter(getter: () => string | null): void {
+  getAccessToken = getter;
+}
+
 export const fetchHandler = async <T>(
   url: string,
   init?: RequestInit,
