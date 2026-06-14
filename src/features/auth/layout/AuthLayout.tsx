@@ -5,7 +5,7 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
     <div className="min-h-screen flex">
       {/* Left panel */}
       <div className="hidden lg:flex lg:w-3/5 bg-blue-500 flex-col justify-between p-10 relative overflow-hidden">
-        {/* Rings */}
+        {/* Decorative rings */}
         <div className="absolute top-0 right-0 w-64 h-64 rounded-full border-[40px] border-white/[0.04] translate-x-1/3 -translate-y-1/3" />
         <div className="absolute top-0 right-0 w-40 h-40 rounded-full border-[25px] border-white/[0.05] translate-x-1/3 -translate-y-1/3" />
         <div className="absolute bottom-0 left-0 w-52 h-52 rounded-full border-[35px] border-white/[0.04] -translate-x-1/3 translate-y-1/3" />
@@ -28,6 +28,13 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
           <p className="text-white/40 text-sm">
             — Sofia Esposito, Product Lead
           </p>
+        </div>
+
+        {/* Dots */}
+        <div className="flex gap-1.5 relative z-10">
+          <div className="h-1.5 w-5 rounded-full bg-white/70" />
+          <div className="h-1.5 w-5 rounded-full bg-white/70" />
+          <div className="h-1.5 w-5 rounded-full bg-white/70" />
         </div>
       </div>
 
