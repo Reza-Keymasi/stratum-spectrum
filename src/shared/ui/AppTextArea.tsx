@@ -15,7 +15,7 @@ const AppTextArea = ({ label, error, ...props }: AppTextAreaProps) => {
       )}
 
       <Textarea
-        className="border-sky-200 focus-visible:ring-0 focus-visible:border-sky-400"
+        className="border-none bg-gray-200/30 focus-visible:ring-0 focus-visible:bg-gray-200/50"
         {...props}
       />
 

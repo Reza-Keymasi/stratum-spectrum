@@ -31,9 +31,9 @@ const AppCombobox = ({
       <ComboboxInput
         name={name}
         className="w-full
-        border-sky-200
+        border-none bg-gray-200/30  py-6
         has-[[data-slot=input-group-control]:focus-visible]:ring-0
-        has-[[data-slot=input-group-control]:focus-visible]:border-sky-400
+        has-[[data-slot=input-group-control]:focus-visible]:bg-gray-200/50
         has-[[data-slot=input-group-control]:focus-visible]:shadow-none
       "
         placeholder={inputPlaceholder}

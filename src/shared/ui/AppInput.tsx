@@ -15,7 +15,7 @@ const AppInput = ({ label, error, ...props }: AppInputProps) => {
       )}
 
       <Input
-        className="border-sky-200 focus-visible:ring-0 focus-visible:border-sky-400"
+        className="border-none bg-gray-200/30 focus-visible:ring-0 focus-visible:bg-gray-200/50 py-6"
         {...props}
       />
 
