@@ -19,6 +19,7 @@ interface AppEmptyProps {
   children?: ReactNode;
 
   emptyClassName?: String;
+  emptyHeaderClassName?: string;
 }
 
 const AppEmpty = ({
@@ -27,11 +28,12 @@ const AppEmpty = ({
   emptyDescription,
   emptyMedia,
   emptyClassName = "",
+  emptyHeaderClassName = "",
   children,
 }: AppEmptyProps) => {
   return (
     <Empty className={cn(emptyClassName)}>
-      <EmptyHeader>
+      <EmptyHeader className={cn(emptyHeaderClassName)}>
         {emptyMedia ? (
           <EmptyMedia variant="icon">{emptyMedia}</EmptyMedia>
         ) : null}
