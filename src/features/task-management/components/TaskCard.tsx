@@ -1,9 +1,9 @@
 import { Trash2, InfoIcon, LucideEdit } from "lucide-react";
+import { DragEvent } from "react";
 
 import { Task, TaskPriority, TaskStatus } from "../types/task.schema";
 import { Button } from "@/components/ui/button";
 import { useTaskStore } from "../store/useTaskStore";
-import { DragEvent } from "react";
 import { cn } from "@/lib/utils";
 
 const statusLabels: Record<TaskStatus, string> = {
@@ -70,9 +70,16 @@ const TaskCard = ({
         className={cn("flex", showStatus ? "justify-between" : "justify-end")}
       >
         {showStatus ? (
-          <span className="bg-muted hover:bg-accent rounded-md border px-3 py-1 text-left text-sm font-semibold transition">
-            {statusLabels[task.status]}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="bg-neutral-100 rounded-md border px-3 py-1 text-left text-sm font-semibold">
+              {statusLabels[task.status]}
+            </span>
+            <span className="text-sm bg-neutral-100 text-sky-400 px-3 py-1 rounded-md">
+              {task.steps.length > 0
+                ? `${task.steps.length} Steps`
+                : "No steps yet"}
+            </span>
+          </div>
         ) : null}
         <div>
           <Button

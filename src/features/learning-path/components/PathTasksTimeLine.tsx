@@ -8,7 +8,7 @@ interface TasksTimeLineProps {
 
 const PathTasksTimeLine = ({ tasks }: TasksTimeLineProps) => {
   return (
-    <section className="relative md:px-16 mt-10 border-slate-200 dark:border-slate-700">
+    <section className="relative md:px-16 my-10 border-slate-200 dark:border-slate-700">
       {tasks?.length > 0 ? (
         <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-slate-300 dark:bg-slate-700"></div>
       ) : null}

@@ -100,7 +100,9 @@ const LearningPathDetailsView = () => {
       <PathTasksTimeLine tasks={tasks!} />
 
       <div className="flex flex-col gap-3">
-        <h3 className="text-xl font-semibold">Write A Summary To Your Path</h3>
+        <h3 className="w-fit text-xl font-semibold bg-neutral-200 text-gray-600 rounded-2xl px-4 py-3">
+          Write A Summary To Your Path
+        </h3>
         <SummaryEditor
           learningPathId={String(params.id)}
           initialSummary={learningPathData?.summary}
