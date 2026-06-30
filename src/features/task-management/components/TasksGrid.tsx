@@ -7,6 +7,8 @@ import { useDragAndDrop } from "@/shared/hooks/useDragAndDrop";
 import AppCard from "@/shared/ui/AppCard";
 import TaskCard from "./TaskCard";
 import TaskOperationModal from "./modals/TaskOperationsModal";
+import AppEmpty from "@/shared/ui/AppEmpty";
+import Spinner from "@/shared/ui/Spinner";
 
 const statusLabels: Record<TaskStatus, string> = {
   todo: "To do",
@@ -16,7 +18,7 @@ const statusLabels: Record<TaskStatus, string> = {
 
 const TasksGrid = () => {
   const queryClient = useQueryClient();
-  const { data: tasks = [], isPending: isGetTaskPending } = useGetTasks();
+  const { data: tasks = [], isPending: isGetTasksPending } = useGetTasks();
 
   const { mutate: updateTask } = useUpdateTask({
     onMutate: async ({ id, payload }) => {
@@ -48,6 +50,20 @@ const TasksGrid = () => {
     }),
     [tasks],
   );
+
+  if (isGetTasksPending) {
+    return (
+      <div className="flex items-center justify-center h-[calc(100vh-270px)]">
+        <AppEmpty
+          emptyClassName="border border-dashed"
+          emptyHeaderClassName="hidden"
+        >
+          <Spinner />
+          <span>Loading tasks...</span>
+        </AppEmpty>
+      </div>
+    );
+  }
 
   return (
     <div className="grid gap-4 md:grid-cols-3">

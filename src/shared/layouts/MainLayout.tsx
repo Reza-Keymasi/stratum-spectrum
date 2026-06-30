@@ -13,7 +13,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
           <div className="flex items-center gap-2 px-7 py-2">
             <SidebarTrigger className="-ml-1" />
           </div>
-          {children}
+          <div className="p-4 md:p-8">{children}</div>
         </main>
       </div>
     </SidebarProvider>

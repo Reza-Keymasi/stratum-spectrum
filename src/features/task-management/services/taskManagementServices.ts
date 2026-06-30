@@ -1,11 +1,16 @@
 import { z } from "zod";
 
 import { fetchHandler } from "@/shared/lib/fetchHandler";
-import { CreateAndEditTaskInput, Task, TaskSchema } from "../types/task.schema";
+import {
+  CreateAndEditTaskInput,
+  GetTaskSchema,
+  Task,
+  TaskSchema,
+} from "../types/task.schema";
 
 export const getTasks = async () => {
-  return fetchHandler<Task[]>("/api/tasks").then((res) =>
-    z.array(TaskSchema).parse(res),
+  return await fetchHandler<Task[]>("/api/tasks").then((res) =>
+    z.array(GetTaskSchema).parse(res),
   );
 };
 

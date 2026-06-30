@@ -36,14 +36,18 @@ const CreateAndEditTaskForm = ({
       category: initialData?.category ?? "personal",
       dueDate: initialData?.dueDate ?? undefined,
       learningPathId:
-        initialData?.learningPathId ?? learningPathId ?? undefined,
+        initialData?.learningPath?._id ?? learningPathId ?? undefined,
     },
   });
 
   const isEditMode = !!initialData;
 
   const { mutate, isPending: isCreateTaskPending } = useCreateTask();
-  const { mutate: editTask, isPending: isEditTaskPending } = useUpdateTask();
+  const { mutate: editTask, isPending: isEditTaskPending } = useUpdateTask({
+    extraInvalidationKeys: learningPathId
+      ? [["tasks", learningPathId]]
+      : undefined,
+  });
 
   const isPending = isCreateTaskPending || isEditTaskPending;
 
@@ -91,7 +95,11 @@ const CreateAndEditTaskForm = ({
           />
         </div>
         <FormTextArea name="description" placeholder="Short description" />
-        <Button className="w-full" type="submit" disabled={isPending}>
+        <Button
+          className="w-full py-6 bg-blue-500/90 hover:bg-blue-500"
+          type="submit"
+          disabled={isPending}
+        >
           {isEditMode ? "Edit task" : "Create task"}
         </Button>
       </form>

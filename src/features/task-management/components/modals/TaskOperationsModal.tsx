@@ -15,16 +15,22 @@ const modalTitleMap = {
   edit: "Edit",
 };
 
-const TaskOperationsModal = () => {
+const TaskOperationsModal = ({
+  learningPathId,
+}: {
+  learningPathId?: string;
+}) => {
   const queryClient = useQueryClient();
 
   const activeTask = useTaskStore((state) => state.activeTask);
   const currentView = useTaskStore((state) => state.currentView);
   const closeModal = useTaskStore((state) => state.closeModal);
 
+  const cacheKey = learningPathId ? ["tasks", learningPathId] : ["tasks"];
+
   const { mutate, isPending: isDeletePending } = useDeleteTask();
 
-  const allTasks = queryClient.getQueryData<Task[]>(["tasks"]);
+  const allTasks = queryClient.getQueryData<Task[]>(cacheKey);
 
   const freshTask =
     allTasks?.find((t) => t._id === activeTask?._id) || activeTask;

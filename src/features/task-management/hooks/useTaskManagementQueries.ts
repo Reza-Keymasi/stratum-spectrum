@@ -53,6 +53,7 @@ export const useUpdateTask = (options?: {
   }) => Promise<any> | any;
   onError?: (err: any, variables: any, context: any) => void;
   onSettled?: () => void;
+  extraInvalidationKeys?: string[][];
 }) => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -64,10 +65,16 @@ export const useUpdateTask = (options?: {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       queryClient.invalidateQueries({ queryKey: ["learning-path"] });
+      options?.extraInvalidationKeys?.forEach((key) =>
+        queryClient.invalidateQueries({ queryKey: key }),
+      );
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       queryClient.invalidateQueries({ queryKey: ["learning-path"] });
+      options?.extraInvalidationKeys?.forEach((key) =>
+        queryClient.invalidateQueries({ queryKey: key }),
+      );
       options?.onSettled?.();
     },
   });

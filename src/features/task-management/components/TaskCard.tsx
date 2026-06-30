@@ -54,6 +54,11 @@ const TaskCard = ({
           <p className="px-2 py-1 rounded-md text-start bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/10 hover:text-indigo-500 text-ellipsis line-clamp-2">
             {task.title}
           </p>
+          {task?.learningPath ? (
+            <span className="text-xs bg-neutral-200 text-gray-600 text-ellipsis px-2 py-1 rounded-md line-clamp-2">
+              path - {task.learningPath.title}
+            </span>
+          ) : null}
         </div>
         <span
           className={`rounded-full px-2 py-0.5 text-xs font-medium ${priorityClassMap[task.priority]}`}
@@ -61,9 +66,6 @@ const TaskCard = ({
           {task.priority}
         </span>
       </div>
-      {/* {task.description ? (
-        <p className="text-muted-foreground mb-3 text-sm">{task.description}</p>
-      ) : null} */}
       <div
         className={cn("flex", showStatus ? "justify-between" : "justify-end")}
       >

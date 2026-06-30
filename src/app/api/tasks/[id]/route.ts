@@ -12,9 +12,7 @@ export async function GET(
     await connectToDB();
     const { id } = await params;
 
-    const tasks = await Task.find({ learningPath: id })
-      .sort({ createdAt: -1 })
-      .lean();
+    const tasks = await Task.find({ learningPath: id }).lean();
     return NextResponse.json(tasks);
   } catch (error) {
     return NextResponse.json(error);

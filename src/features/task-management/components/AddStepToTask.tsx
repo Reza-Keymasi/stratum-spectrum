@@ -10,18 +10,29 @@ const AddStepToTask = ({ selectedTask }: { selectedTask: Task }) => {
   const [showTaskStepInput, setShowTaskStepInput] = useState(false);
   const [taskStepText, setTaskStepText] = useState("");
 
-  const { mutate, isPending } = useUpdateTask();
+  const { mutate, isPending } = useUpdateTask({
+    extraInvalidationKeys: selectedTask?.learningPath?._id
+      ? [["tasks", selectedTask.learningPath._id]]
+      : undefined,
+  });
 
   const handleAddStep = (id: string, step: string) => {
-    mutate({
-      id,
-      payload: {
-        steps: [
-          ...(selectedTask.steps ?? []),
-          { text: step.trim(), done: false },
-        ],
+    mutate(
+      {
+        id,
+        payload: {
+          steps: [
+            ...(selectedTask.steps ?? []),
+            { text: step.trim(), done: false },
+          ],
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          setTaskStepText("");
+        },
+      },
+    );
   };
 
   const handleUpdateStep = (id: string, index: number) => {
@@ -63,7 +74,7 @@ const AddStepToTask = ({ selectedTask }: { selectedTask: Task }) => {
         </div>
 
         {showTaskStepInput ? (
-          <div className="flex w-full gap-2">
+          <div className="flex w-full items-center gap-2">
             <AppInput
               name="step"
               placeholder="Enter Step"
@@ -82,13 +93,13 @@ const AddStepToTask = ({ selectedTask }: { selectedTask: Task }) => {
         ) : null}
 
         {selectedTask.steps?.length > 0 ? (
-          <ul className="space-y-2">
+          <ul className="space-y-2 h-[200px] overflow-y-auto">
             {selectedTask.steps?.map((step, index) => (
               <li key={`${step.text} - ${index}`}>
                 <Button
                   type="button"
                   variant="outline"
-                  className="hover:bg-muted  w-full flex justify-start items-center gap-2 rounded-md border p-2 text-justify"
+                  className="hover:bg-muted  w-full flex justify-start items-center gap-2 rounded-md border p-2 text-justify cursor-pointer"
                   onClick={() => handleUpdateStep(selectedTask._id, index)}
                 >
                   <CircleCheckBig

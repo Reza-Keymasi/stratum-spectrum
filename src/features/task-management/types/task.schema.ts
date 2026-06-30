@@ -25,7 +25,17 @@ export const TaskSchema = z.object({
   learningPathId: z.string().optional().nullable(),
 });
 
-export type Task = z.infer<typeof TaskSchema>;
+export const GetTaskSchema = TaskSchema.omit({ learningPathId: true }).extend({
+  learningPath: z
+    .object({
+      _id: z.string().optional().nullable(),
+      title: z.string().optional().nullable(),
+    })
+    .optional()
+    .nullable(),
+});
+
+export type Task = z.infer<typeof GetTaskSchema>;
 
 export const CreateAndEditTaskSchema = TaskSchema.pick({
   title: true,
