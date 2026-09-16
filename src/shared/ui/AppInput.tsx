@@ -5,9 +5,10 @@ import { Input } from "@/components/ui/input";
 interface AppInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
+  disabled?: boolean;
 }
 
-const AppInput = ({ label, error, ...props }: AppInputProps) => {
+const AppInput = ({ label, error, disabled, ...props }: AppInputProps) => {
   return (
     <div className="flex flex-col gap-1 w-full">
       {label && (
@@ -16,6 +17,7 @@ const AppInput = ({ label, error, ...props }: AppInputProps) => {
 
       <Input
         className="border-none bg-gray-200/30 focus-visible:ring-0 focus-visible:bg-gray-200/50 py-6"
+        disabled={disabled}
         {...props}
       />
 
