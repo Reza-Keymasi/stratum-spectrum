@@ -1,18 +1,38 @@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { cn } from "@/lib/utils";
-import { on } from "events";
 
-interface AppToggleGroup {
-  value: string;
-  onValueChange: (value: string) => void;
+type GroupType = "single" | "multiple";
+
+interface BaseToggleGroupProps {
   items: string[];
   itemsContainerClassName?: string;
   itemClassName?: string;
-  variant?: "outline" | "default";
   spacing?: number;
+  variant: "default" | "outline";
 }
 
+interface SingleToggleGroupProps<
+  T extends GroupType,
+> extends BaseToggleGroupProps {
+  type: T;
+  value: string;
+  onValueChange: (value: string) => void;
+}
+
+interface MultipleToggleGroupProps<
+  T extends GroupType,
+> extends BaseToggleGroupProps {
+  type: T;
+  value: string[];
+  onValueChange: (value: string[]) => void;
+}
+
+type AppToggleGroupProps =
+  | SingleToggleGroupProps<"single">
+  | MultipleToggleGroupProps<"multiple">;
+
 const AppToggleGroup = ({
+  type,
   value,
   onValueChange,
   items,
@@ -20,10 +40,15 @@ const AppToggleGroup = ({
   itemClassName,
   variant = "default",
   spacing = 5,
-}: AppToggleGroup) => {
+  ...props
+}: AppToggleGroupProps) => {
   return (
     <ToggleGroup
-      type="single"
+      {...({
+        type,
+        value: value ?? (type === "multiple" ? [] : ""),
+        onValueChange,
+      } as any)}
       // variant="outline"
       value={value}
       onValueChange={onValueChange}
@@ -32,6 +57,7 @@ const AppToggleGroup = ({
         itemsContainerClassName,
         // "border border-sky-500/30 rounded-md px-1",
       )}
+      {...props}
     >
       {items.map((item, index) => (
         <ToggleGroupItem
