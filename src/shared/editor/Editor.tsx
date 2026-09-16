@@ -49,7 +49,7 @@ export default function Editor({
     <MDXEditor
       markdown={markdown}
       className="w-full bg-white rounded-t-2xl markdown-editor"
-      contentEditableClassName="h-fit min-h-[350px] overflow-y-auto text-gray-500 border border-transparent focus:border focus:border-gray-200 rounded-b-2xl"
+      contentEditableClassName="h-fit min-h-[350px] overflow-y-auto text-gray-500 border  focus:border focus:border-gray-200 rounded-b-2xl"
       placeholder={placeholder}
       plugins={[
         headingsPlugin(),
