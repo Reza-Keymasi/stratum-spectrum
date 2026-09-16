@@ -8,6 +8,8 @@ import {
   ChevronRight,
   BookOpen,
   Sparkles,
+  ClockPlus,
+  ListRestart,
 } from "lucide-react";
 
 import {
@@ -19,10 +21,8 @@ import {
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuBadge,
   SidebarMenuButton,
@@ -49,9 +49,20 @@ const AppSidebar = ({ ...props }: ComponentProps<typeof Sidebar>) => {
     },
     {
       title: "Habit Tracker",
-      url: ROUTES.HABITS,
       icon: CheckSquare,
       isComingSoon: true,
+      subItems: [
+        {
+          title: "New Habit",
+          url: ROUTES.HABITS_NEW,
+          icon: ClockPlus,
+        },
+        {
+          title: "Habits List",
+          url: ROUTES.HABITS_LIST,
+          icon: ListRestart,
+        },
+      ],
     },
     {
       title: "Language Learning",
