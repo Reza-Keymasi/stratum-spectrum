@@ -5,5 +5,6 @@ export const ROUTES = {
   TASKS: "/tasks",
   LEARNING_PATHS: "/learning-paths",
   LEARNING_PATH: (id: string) => `/learning-paths/${id}`,
-  HABITS: "/habits",
+  HABITS_NEW: "/habits/new",
+  HABITS_LIST: "/habits/list",
 };
