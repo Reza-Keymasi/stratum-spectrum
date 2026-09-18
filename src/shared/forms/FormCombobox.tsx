@@ -1,13 +1,22 @@
 import { useFormContext, Controller } from "react-hook-form";
+
 import AppCombobox from "../ui/AppCombobox";
 
 interface FormComboboxProps {
   name: string;
   placeholder?: string;
-  itemsArray: string[];
+  itemsArray: { label: string; value: string }[];
+  isMultiple?: boolean;
+  isDisabled?: boolean;
 }
 
-const FormCombobox = ({ name, placeholder, itemsArray }: FormComboboxProps) => {
+const FormCombobox = ({
+  name,
+  placeholder,
+  itemsArray,
+  isMultiple = false,
+  isDisabled = false,
+}: FormComboboxProps) => {
   const { control } = useFormContext();
   const {
     register,
@@ -22,8 +31,10 @@ const FormCombobox = ({ name, placeholder, itemsArray }: FormComboboxProps) => {
           itemsArray={itemsArray}
           inputPlaceholder={placeholder}
           name={name}
-          value={field.value ?? ""}
+          multiple={isMultiple}
+          value={field.value ?? (isMultiple ? [] : "")}
           onChange={field.onChange}
+          isDisabled={isDisabled}
         />
       )}
     />
