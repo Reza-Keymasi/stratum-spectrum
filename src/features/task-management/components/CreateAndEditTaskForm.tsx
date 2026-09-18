@@ -22,6 +22,17 @@ interface CreateAndEditTaskFormProps {
   learningPathId?: string;
 }
 
+const PRIORITY_ITEMS = [
+  { label: "low", value: "low" },
+  { label: "medium", value: "medium" },
+  { label: "high", value: "high" },
+];
+const CATEGORIES = [
+  { label: "planning", value: "planning" },
+  { label: "leaning", value: "leaning" },
+  { label: "personal", value: "personal" },
+];
+
 const CreateAndEditTaskForm = ({
   initialData,
   closeModal,
@@ -85,12 +96,12 @@ const CreateAndEditTaskForm = ({
         <div className="flex gap-3">
           <FormCombobox
             name="priority"
-            itemsArray={["low", "medium", "high"]}
+            itemsArray={PRIORITY_ITEMS}
             placeholder="Enter Priority"
           />
           <FormCombobox
             name="category"
-            itemsArray={["planning", "learning", "personal"]}
+            itemsArray={CATEGORIES}
             placeholder="Enter Category"
           />
         </div>

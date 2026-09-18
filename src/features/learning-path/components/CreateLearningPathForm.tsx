@@ -40,7 +40,7 @@ const CreateLearningPathForm = () => {
         />
         <div className="w-full flex justify-between items-center">
           <span className="text-gray-500">How difficult your path is?</span>
-          <FormToggleGroup name="difficulty" items={pathArray} />
+          <FormToggleGroup name="difficulty" items={pathArray} type="single" />
         </div>
         <Button
           disabled={!titleWatch || !topicWatch}
