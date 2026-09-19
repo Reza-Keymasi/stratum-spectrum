@@ -49,7 +49,8 @@ const HabitDetailsView = ({ id }: { id: string }) => {
       completed: habit?.completed ? false : true,
     });
   };
-  // Habit To Test Specific Days
+
+  const targetValue = habit?.targetValue as number;
 
   const doneDays = entries?.flatMap((entry) =>
     entry.days.filter((day) => day.done === true),
@@ -59,6 +60,9 @@ const HabitDetailsView = ({ id }: { id: string }) => {
   )?.length as number;
 
   const completionRate = Math.floor((doneDays / activeDaysCount) * 100);
+
+  const totalTargetValue = activeDaysCount * targetValue;
+  const trackedValue = doneDays * targetValue;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -91,6 +95,11 @@ const HabitDetailsView = ({ id }: { id: string }) => {
         completed={habit?.completed}
         completionRate={completionRate}
         goalType={habit?.goalType}
+        unit={habit?.unit as string}
+        targetValue={targetValue}
+        weeksCount={entries?.length as number}
+        trackedValue={trackedValue}
+        totalTargetValue={totalTargetValue}
         onToggleCompletion={handleHabitCompletion}
       />
 
