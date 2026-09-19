@@ -1,16 +1,26 @@
+import { MouseEvent } from "react";
 import Link from "next/link";
+import { Trash2 } from "lucide-react";
 
 import { GetHabit as Habit } from "../types/habit.schema";
 import { cn } from "@/lib/utils";
 import { CATEGORY_STYLES } from "../constants/habitConstants";
 import FrequencyType from "./FrequencyType";
+import { Button } from "@/components/ui/button";
+import { useDeleteHabit } from "../hooks/useHabitQueries";
 
 interface HabitRowProps {
   habit: Habit;
 }
 
 const HabitRow = ({ habit }: HabitRowProps) => {
-  const frequencyType = habit?.frequency?.frequencyType;
+  const { mutate: deleteHabit, isPending } = useDeleteHabit();
+
+  const handleDeleteHabit = (event: MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    deleteHabit(habit._id);
+  };
 
   return (
     <Link
@@ -21,9 +31,14 @@ const HabitRow = ({ habit }: HabitRowProps) => {
         <div className="flex items-center gap-3">
           <div className="w-3 h-3 rounded-full bg-sky-300" />
           <div>
-            <span className="text-lg font-semibold text-gray-600">
-              {habit.title}
-            </span>
+            <div className="flex items-center">
+              <span className="text-lg font-semibold text-gray-600">
+                {habit.title}
+              </span>
+              <Button size="sm" variant="ghost" onClick={handleDeleteHabit}>
+                <Trash2 className="text-red-500" />
+              </Button>
+            </div>
 
             <div className="flex flex-wrap gap-3">
               {habit.categories?.map((cat) => (
