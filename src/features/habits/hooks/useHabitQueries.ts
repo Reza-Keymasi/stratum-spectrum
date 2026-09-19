@@ -18,6 +18,7 @@ import {
   getHabitEntry,
   addNewWeek,
   toggleHabitCompletion,
+  deleteHabit,
 } from "../services/habitServices";
 import { UpdateDay } from "../types/habit-entry.schema";
 import { HabitEntry } from "../types/habit-entry.types";
@@ -45,6 +46,16 @@ export const useGetHabit = (id: string): UseQueryResult<GetHabit> => {
 export const useCreateHabit = () => {
   return useMutation({
     mutationFn: (input: CreateHabitInput) => createHabit(input),
+  });
+};
+
+export const useDeleteHabit = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteHabit(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["habits"] });
+    },
   });
 };
 

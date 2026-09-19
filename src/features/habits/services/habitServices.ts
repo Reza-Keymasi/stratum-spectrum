@@ -24,6 +24,12 @@ export const createHabit = (input: CreateHabitInput) => {
   });
 };
 
+export const deleteHabit = (id: string) => {
+  return fetchHandler(`${BASE_URL}/${id}`, {
+    method: "DELETE",
+  });
+};
+
 export const getHabitEntry = (id: string): Promise<HabitEntry[]> => {
   return fetchHandler(`${BASE_URL}/${id}/entries`);
 };
