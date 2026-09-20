@@ -82,12 +82,28 @@ export const buildInitialEntryData = (
           weekStartDay,
         ),
       };
+
+    case "times_per_week": {
+      const days = buildWeekDays(() => true, weekStartDay);
+      const availableDays = days.filter((day) => day.active).length;
+
+      return {
+        ...base,
+        frequencyType: frequency.frequencyType,
+        requiredCount: Math.min(
+          frequency?.timesPerWeek as number,
+          availableDays,
+        ),
+        days: days,
+      };
+    }
   }
 };
 
 export const buildNextWeekEntryData = (
   currentEntry: HabitEntry,
   weekStartDay: 0 | 6 = 0,
+  originalRequiredCount?: number,
 ): Omit<
   HabitEntry,
   "_id" | "habitId" | "userId" | "createdAt" | "updatedAt"
@@ -124,6 +140,19 @@ export const buildNextWeekEntryData = (
           nextWeekStart,
         ),
       };
+
+    case "times_per_week": {
+      const days = buildWeekDays(() => true, weekStartDay, nextWeekStart);
+      const availableDays = days.filter((day) => day.active).length;
+      const targetCount =
+        originalRequiredCount ?? currentEntry.requiredCount ?? 1;
+
+      return {
+        ...base,
+        requiredCount: Math.min(targetCount, availableDays),
+        days,
+      };
+    }
   }
 };
 

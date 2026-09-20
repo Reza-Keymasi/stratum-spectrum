@@ -45,7 +45,7 @@ const HabitEntrySchema = new Schema({
   //     enum: DaysOfWeek,
   //   },
   // ],
-  // requiredCount: { type: Number, min: 1, max: 7 },
+  requiredCount: { type: Number, min: 1, max: 7 },
   // interval: { type: Number, min: 2 },
   days: {
     type: [DayEntrySchema],
