@@ -14,9 +14,9 @@ export interface DayEntry {
 export interface HabitEntry {
   _id: string;
   habitId: string;
-  userId: string;
   weekNumber: number;
   frequencyType: FrequencyType;
+  weekStartDay?: "sunday" | "saturday";
   // specific_days only
   activeDays?: DaysOfWeek[];
   // times_per_week only

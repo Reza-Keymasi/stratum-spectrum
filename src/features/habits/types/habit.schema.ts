@@ -70,6 +70,9 @@ export const CreateHabitSchema = z
     goalType: z.enum(["binary", "quantity"]),
     targetValue: z.coerce.number().optional().nullable(),
     unit: z.string().optional(),
+    weekStartDay: z
+      .union([z.literal("sunday"), z.literal("saturday")])
+      .default("sunday"),
   })
   // .refine(
   //   (data) => {
@@ -98,6 +101,7 @@ export const ToggleHabitCompletionSchema = z.object({
 });
 
 export type CreateHabitInput = z.infer<typeof CreateHabitSchema>;
+export type CreateHabitFormInput = z.input<typeof CreateHabitSchema>;
 
 export type GetHabit = z.infer<typeof GetHabitSchema>;
 export type ToggleHabitCompletion = z.infer<typeof ToggleHabitCompletionSchema>;
