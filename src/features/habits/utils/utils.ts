@@ -156,6 +156,45 @@ export const buildNextWeekEntryData = (
   }
 };
 
+// -----------------------------------------------
+// Times Per Week Habit Day Interactions
+// -----------------------------------------------
+
+interface BoxStats {
+  index: number;
+  checked: boolean;
+  clickable: boolean;
+  action: "increment" | "decrement" | null;
+}
+
+const MAX_VISIBLE_SLOTS = 3;
+
+const getBoxStates = (value: number, totalSlots: number): BoxStats[] => {
+  return Array.from({ length: totalSlots }, (_, i) => {
+    const boxNumber = i + 1;
+    const checked = boxNumber <= value;
+    const isNextEmpty = !checked && boxNumber === value + 1;
+    const isLastChecked = checked && boxNumber === value;
+
+    return {
+      index: 1,
+      checked,
+      clickable: isNextEmpty || isLastChecked,
+      action: isNextEmpty ? "increment" : isLastChecked ? "decrement" : null,
+    };
+  });
+};
+
+export const getDayDisplay = (value: number) => {
+  const overflow = Math.max(value - MAX_VISIBLE_SLOTS, 0);
+  return {
+    boxes: getBoxStates(Math.min(value, MAX_VISIBLE_SLOTS), MAX_VISIBLE_SLOTS),
+    badge: overflow > 0 ? overflow : null,
+    plusClickable: value >= MAX_VISIBLE_SLOTS,
+    badgeClickable: overflow > 0,
+  };
+};
+
 export const daysBetweenCalendarDates = (dateA: Date, dateB: Date): number => {
   const startOfDateA = new Date(
     dateA.getFullYear(),
