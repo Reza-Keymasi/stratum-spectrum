@@ -19,10 +19,12 @@ const frequencyTypes = [
 ] as const;
 const daysOfWeek = ["sat", "sun", "mon", "tue", "wed", "thu", "fri"] as const;
 const goalType = ["binary", "quantity"] as const;
+const weekStartDay = ["sunday", "saturday"] as const;
 
 type HabitCategory = (typeof habitCategories)[number];
 type DaysOfWeek = (typeof daysOfWeek)[number];
 type FrequencyType = (typeof frequencyTypes)[number];
+type WeekStartDay = (typeof weekStartDay)[number];
 
 interface Frequency {
   frequencyType: FrequencyType;
@@ -44,6 +46,7 @@ interface Habit {
   frequency: Frequency;
   completed?: boolean;
   completedAt: Date | null;
+  weekStartDay: WeekStartDay;
 }
 
 const HabitSchema = new Schema<Habit>(
@@ -66,6 +69,11 @@ const HabitSchema = new Schema<Habit>(
     isNegative: {
       type: Boolean,
       default: true,
+    },
+    weekStartDay: {
+      type: String,
+      enum: weekStartDay,
+      default: "sunday",
     },
 
     frequency: {
