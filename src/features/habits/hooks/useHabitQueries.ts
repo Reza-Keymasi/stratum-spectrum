@@ -84,7 +84,11 @@ export const useUpdateHabitEntry = () => {
   return useMutation({
     mutationFn: ({ input, id, weekNumber }: UpdateHabitEntryVariables) =>
       updateHabitEntry(input, id, weekNumber),
-    onSuccess: (_, { id }) => {
+    onSuccess: (updatedEntry, { id }) => {
+      queryClient.invalidateQueries(
+        { queryKey: ["habit-entry", id] },
+        updatedEntry,
+      );
       queryClient.invalidateQueries({ queryKey: ["habit-entry", id] });
     },
   });

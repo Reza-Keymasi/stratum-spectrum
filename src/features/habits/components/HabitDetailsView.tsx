@@ -14,7 +14,6 @@ import HabitHeader from "./HabitHeader";
 
 const HabitDetailsView = ({ id }: { id: string }) => {
   const { data: habit } = useGetHabit(id);
-  const isNegative = habit?.isNegative;
   const { data: entries, isPending: isPendeingHabitEntry } =
     useGetHabitEntry(id);
   const { mutate: updateDay } = useUpdateHabitEntry();
@@ -44,6 +43,19 @@ const HabitDetailsView = ({ id }: { id: string }) => {
       },
     });
   };
+
+  const handleBoxClick = (
+    dayIndex: number,
+    weekNumber: number,
+    action: "increment" | "decrement",
+  ) => {
+    updateDay({
+      id,
+      weekNumber: String(weekNumber),
+      input: { dayIndex, action },
+    });
+  };
+
   const handleHabitCompletion = () => {
     habitCompletion({
       completed: habit?.completed ? false : true,
@@ -87,6 +99,8 @@ const HabitDetailsView = ({ id }: { id: string }) => {
         entries={entries}
         onAddWeek={() => addNewWeek()}
         onDayClick={handleClickOnDay}
+        onBoxClick={handleBoxClick}
+        habit={habit}
       />
 
       {/* Total Progress Starts Here */}
