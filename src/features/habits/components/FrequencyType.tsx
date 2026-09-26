@@ -44,7 +44,7 @@ const FrequencyType = ({ habit }: Props) => {
             "px-2 py-1 rounded-md",
           )}
         >
-          {habit.frequency.timesPerWeek} D/Week
+          {habit.frequency.timesPerWeek} Times/Week
         </span>
       )}
 
