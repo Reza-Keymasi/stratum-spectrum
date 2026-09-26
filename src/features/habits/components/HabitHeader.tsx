@@ -18,7 +18,7 @@ const HabitHeader = ({
 }: HabitHeaderProps) => {
   return (
     <div className="flex justify-between">
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-1 flex-col gap-3">
         <span className="text-2xl md:text-3xl font-bold text-black capitalize">
           {title}
         </span>
