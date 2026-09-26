@@ -26,6 +26,10 @@ export const getDayOfWeek = (date: Date) => {
   return DAYS_OF_WEEK[new Date(date).getDay()];
 };
 
+export const transformDayToIndex = (day: "sunday" | "saturday"): 0 | 6 => {
+  return day === "sunday" ? 0 : 6;
+};
+
 const buildWeekDays = (
   getActive: (date: Date) => boolean,
   weekStartDay: 0 | 6 = 0,
@@ -49,13 +53,7 @@ const buildWeekDays = (
 // Build initial entry data from habit's frequency
 // -----------------------------------------------
 
-export const buildInitialEntryData = (
-  habit: CreateHabitInput,
-  weekStartDay: 0 | 6 = 0,
-): Omit<
-  HabitEntry,
-  "_id" | "habitId" | "userId" | "createdAt" | "updatedAt"
-> => {
+export const buildInitialEntryData = (habit: CreateHabitInput) => {
   const { frequency } = habit;
 
   const base = {
@@ -63,6 +61,8 @@ export const buildInitialEntryData = (
     completed: false,
     completionRate: 0,
   };
+
+  const weekStartDay = transformDayToIndex(habit.weekStartDay);
 
   switch (frequency.frequencyType) {
     case "daily":
@@ -102,12 +102,8 @@ export const buildInitialEntryData = (
 
 export const buildNextWeekEntryData = (
   currentEntry: HabitEntry,
-  weekStartDay: 0 | 6 = 0,
   originalRequiredCount?: number,
-): Omit<
-  HabitEntry,
-  "_id" | "habitId" | "userId" | "createdAt" | "updatedAt"
-> => {
+): Omit<HabitEntry, "_id" | "habitId" | "createdAt" | "updatedAt"> => {
   const currentWeekStart = new Date(currentEntry.days[0].date);
   const nextWeekStart = new Date(currentWeekStart);
   nextWeekStart.setDate(currentWeekStart.getDate() + 7);
@@ -117,6 +113,10 @@ export const buildNextWeekEntryData = (
     frequencyType: currentEntry.frequencyType,
     completionRate: 0,
   };
+
+  const weekStartDay = transformDayToIndex(
+    currentEntry?.weekStartDay ?? "sunday",
+  );
 
   switch (currentEntry?.frequencyType) {
     case "daily":
