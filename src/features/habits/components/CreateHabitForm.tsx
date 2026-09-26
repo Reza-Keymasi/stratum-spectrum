@@ -4,7 +4,11 @@ import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { CreateHabitInput, CreateHabitSchema } from "../types/habit.schema";
+import {
+  CreateHabitFormInput,
+  CreateHabitInput,
+  CreateHabitSchema,
+} from "../types/habit.schema";
 import FormInput from "@/shared/forms/FormInput";
 import FormToggleGroup from "@/shared/forms/FormToggleGroup";
 import { useCreateHabit } from "../hooks/useHabitQueries";
@@ -16,6 +20,7 @@ import {
   DAYS_OF_WEEK_WITH_LABEL,
   FREQUENCY_TYPES,
   HABIT_CATEGORIES,
+  WEEK_START_DAY,
 } from "../constants/habitConstants";
 
 const CreateHabitForm = () => {
@@ -28,7 +33,7 @@ const CreateHabitForm = () => {
     customInterval: undefined,
   };
 
-  const methods = useForm<CreateHabitInput>({
+  const methods = useForm<CreateHabitFormInput, any, CreateHabitInput>({
     resolver: zodResolver(CreateHabitSchema),
     defaultValues: {
       title: "",
@@ -39,12 +44,14 @@ const CreateHabitForm = () => {
       targetValue: undefined,
       unit: undefined,
       frequency: defaultFrequency,
+      weekStartDay: "sunday",
     },
   });
 
   const { mutate } = useCreateHabit();
 
   const handleSubmitHabit = (data: CreateHabitInput) => {
+    console.log(data);
     mutate(data, {
       onSuccess: () => {
         methods.reset();
@@ -150,6 +157,18 @@ const CreateHabitForm = () => {
             type="multiple"
           />
         </div>
+
+        <div className="w-full flex flex-col justify-center gap-1">
+          <span className="text-gray-500">
+            Choose a day for start of the week
+          </span>
+          <FormToggleGroup
+            name="weekStartDay"
+            items={WEEK_START_DAY}
+            type="single"
+          />
+        </div>
+
         <div className="flex items-center gap-2">
           <FormCheckbox name="isNegative" />
           <span>Is it bad habit?</span>

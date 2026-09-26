@@ -36,6 +36,8 @@ export const DAYS_OF_WEEK_WITH_LABEL = [
   { value: "sat", label: "Saturday" },
 ];
 
+export const WEEK_START_DAY = ["sunday", "saturday"];
+
 export const CATEGORY_STYLES: Record<string, { text: string; full: string }> = {
   Health: {
     text: "text-emerald-600",
