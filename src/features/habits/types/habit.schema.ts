@@ -19,7 +19,7 @@ const FrequencySpecificDaysSchema = z.object({
 
 const FrequencyTimesPerWeekSchema = z.object({
   frequencyType: z.literal("times_per_week"),
-  timesPerWeek: z.coerce.number().int().min(1).max(7).optional().nullable(),
+  timesPerWeek: z.coerce.number().int().min(1).optional().nullable(),
 });
 
 const FrequencyCustomIntervalSchema = z.object({
