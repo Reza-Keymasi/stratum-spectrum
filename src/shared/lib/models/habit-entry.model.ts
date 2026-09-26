@@ -1,7 +1,7 @@
 import { Schema, model, models } from "mongoose";
 
 type DaysOfWeek = "sat" | "sun" | "mon" | "tue" | "wed" | "thu" | "fri";
-const DaysOfWeek = ["sat", "sun", "mon", "tue", "wed", "thu", "fri"];
+const DaysOfWeek = ["sat", "sun", "mon", "tue", "wed", "thu", "fri"] as const;
 
 type FrequencyType =
   | "daily"
@@ -39,13 +39,13 @@ const HabitEntrySchema = new Schema({
   habitId: { type: Schema.Types.ObjectId, ref: "Habit", required: true },
   weekNumber: { type: Number, required: true, min: 1 },
   frequencyType: { type: String, enum: frequencyTypes, required: true },
-  // activeDays: [
-  //   {
-  //     type: String,
-  //     enum: DaysOfWeek,
-  //   },
-  // ],
-  requiredCount: { type: Number, min: 1, max: 7 },
+  activeDays: [
+    {
+      type: String,
+      enum: DaysOfWeek,
+    },
+  ],
+  requiredCount: { type: Number, min: 1 },
   // interval: { type: Number, min: 2 },
   days: {
     type: [DayEntrySchema],

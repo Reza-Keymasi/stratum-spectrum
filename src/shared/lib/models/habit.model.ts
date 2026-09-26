@@ -90,15 +90,14 @@ const HabitSchema = new Schema<Habit>(
       timesPerWeek: {
         type: Number,
         min: 1,
-        max: 7,
         validate: {
           validator: function (value) {
             if (this?.frequency.frequencyType === "times_per_week") {
-              return value >= 1 && value <= 7;
+              return value >= 1;
             }
             return true;
           },
-          message: "Times per week must be an integer between 1 and 7.",
+          message: "Times per week must be an integer more than 1.",
         },
       },
       customInterval: {
