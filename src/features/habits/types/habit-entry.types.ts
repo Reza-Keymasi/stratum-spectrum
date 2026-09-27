@@ -1,7 +1,6 @@
 export type DaysOfWeek = "sat" | "sun" | "mon" | "tue" | "wed" | "thu" | "fri";
 
 type FrequencyType = "daily" | "specific_days" | "times_per_week";
-// | "custom_interval";
 
 export interface DayEntry {
   index: number;
@@ -21,11 +20,7 @@ export interface HabitEntry {
   activeDays?: DaysOfWeek[];
   // times_per_week only
   requiredCount?: number;
-  // custom_interval only
-  interval?: number;
-  // all types
   days: DayEntry[];
-  // completed: boolean;
   createdAt: string;
   updatedAt: string;
 }

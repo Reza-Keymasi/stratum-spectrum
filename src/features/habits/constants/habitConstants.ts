@@ -13,7 +13,6 @@ export const FREQUENCY_TYPES = [
   { value: "daily", label: "Every Day" },
   { value: "specific_days", label: "Specific Days of Week" },
   { value: "times_per_week", label: "X Times Per Week" },
-  { value: "custom_interval", label: "Custom Interval (Every X days)" },
 ];
 
 export const DAYS_OF_WEEK = [
@@ -77,5 +76,4 @@ export const FREQUENCY_STYLES_MAP: Record<string, string> = {
   daily: "text-lime-700 bg-lime-100",
   specific_days: "text-gray-500 bg-gray-100",
   times_per_week: "text-slate-600 bg-slate-100",
-  custom_interval: "text-purple-700 bg-purple-50",
 };

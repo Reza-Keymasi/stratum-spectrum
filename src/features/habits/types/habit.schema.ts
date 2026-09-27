@@ -22,21 +22,10 @@ const FrequencyTimesPerWeekSchema = z.object({
   timesPerWeek: z.coerce.number().int().min(1).optional().nullable(),
 });
 
-const FrequencyCustomIntervalSchema = z.object({
-  frequencyType: z.literal("custom_interval"),
-  customInterval: z.coerce
-    .number()
-    .int()
-    .min(2, "Interval must be at least 2 days")
-    .optional()
-    .nullable(),
-});
-
 const FrequencySchema = z.discriminatedUnion("frequencyType", [
   FrequencyDailySchema,
   FrequencySpecificDaysSchema,
   FrequencyTimesPerWeekSchema,
-  FrequencyCustomIntervalSchema,
 ]);
 
 export const GetHabitSchema = z.object({

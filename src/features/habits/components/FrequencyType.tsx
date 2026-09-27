@@ -47,17 +47,6 @@ const FrequencyType = ({ habit }: Props) => {
           {habit.frequency.timesPerWeek} Times/Week
         </span>
       )}
-
-      {frequencyType === "custom_interval" && (
-        <span
-          className={cn(
-            FREQUENCY_STYLES_MAP[frequencyType],
-            "px-2 py-1 rounded-md",
-          )}
-        >
-          {habit.frequency.customInterval}x/Week
-        </span>
-      )}
     </>
   );
 };

@@ -30,7 +30,6 @@ const CreateHabitForm = () => {
     frequencyType: "daily" as const,
     daysOfWeek: undefined,
     timesPerWeek: undefined,
-    customInterval: undefined,
   };
 
   const methods = useForm<CreateHabitFormInput, any, CreateHabitInput>({
@@ -66,7 +65,6 @@ const CreateHabitForm = () => {
   const enableFrequencyFields = {
     specificDaysOfWeek: watchFields.frequency.frequencyType === "specific_days",
     timesPerWeek: watchFields.frequency.frequencyType === "times_per_week",
-    customInterval: watchFields.frequency.frequencyType === "custom_interval",
   };
 
   return (
@@ -133,13 +131,6 @@ const CreateHabitForm = () => {
               <FormInput
                 name="frequency.timesPerWeek"
                 placeholder="Enter X per weeks"
-              />
-            </div>
-          ) : enableFrequencyFields.customInterval ? (
-            <div className="flex flex-1 animate-in fade-in duration-300">
-              <FormInput
-                name="frequency.customInterval"
-                placeholder="Enter interval"
               />
             </div>
           ) : null}

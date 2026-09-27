@@ -11,12 +11,7 @@ const habitCategories = [
   "Other",
 ] as const;
 
-const frequencyTypes = [
-  "daily",
-  "specific_days",
-  "times_per_week",
-  "custom_interval",
-] as const;
+const frequencyTypes = ["daily", "specific_days", "times_per_week"] as const;
 const daysOfWeek = ["sat", "sun", "mon", "tue", "wed", "thu", "fri"] as const;
 const goalType = ["binary", "quantity"] as const;
 const weekStartDay = ["sunday", "saturday"] as const;
@@ -30,7 +25,6 @@ interface Frequency {
   frequencyType: FrequencyType;
   daysOfWeek?: DaysOfWeek[];
   timesPerWeek?: number;
-  customInterval?: number;
 }
 
 interface Habit {
@@ -106,19 +100,6 @@ const HabitSchema = new Schema<Habit>(
             return true;
           },
           message: "Times per week must be an integer more than 1.",
-        },
-      },
-      customInterval: {
-        type: Number,
-        min: 2,
-        validate: {
-          validator: function (value) {
-            if (this?.frequency.frequencyType === "custom_interval") {
-              return value >= 2;
-            }
-            return true;
-          },
-          message: "Interval must be at least 2 days.",
         },
       },
     },

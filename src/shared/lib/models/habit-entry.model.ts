@@ -3,18 +3,9 @@ import { Schema, model, models } from "mongoose";
 type DaysOfWeek = "sat" | "sun" | "mon" | "tue" | "wed" | "thu" | "fri";
 const DaysOfWeek = ["sat", "sun", "mon", "tue", "wed", "thu", "fri"] as const;
 
-type FrequencyType =
-  | "daily"
-  | "specific_days"
-  | "times_per_week"
-  | "custom_interval";
+type FrequencyType = "daily" | "specific_days" | "times_per_week";
 
-const frequencyTypes = [
-  "daily",
-  "specific_days",
-  "times_per_week",
-  "custom_interval",
-];
+const frequencyTypes = ["daily", "specific_days", "times_per_week"];
 
 export interface DayEntry {
   index: number;
