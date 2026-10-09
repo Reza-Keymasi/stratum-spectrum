@@ -4,14 +4,23 @@ import connectToDB from "@/app/lib/db/connectToDB";
 import Task from "@/shared/lib/models/task.model";
 import { CreateAndEditTaskSchema } from "@/features/task-management/types/task.schema";
 import { attachTaskToLearningPath } from "@/shared/services/taskLinker";
+import { requireAuth } from "@/features/auth/lib/session";
 
 export async function GET() {
   await connectToDB();
-  const tasks = await Task.find()
-    .sort({ createdAt: -1 })
-    .populate({ path: "learningPath", select: "title" })
-    .lean();
-  return NextResponse.json(tasks);
+  try {
+    const { userId } = await requireAuth();
+    const tasks = await Task.find({ userId })
+      .sort({ createdAt: -1 })
+      .populate({ path: "learningPath", select: "title" })
+      .lean();
+    return NextResponse.json(tasks);
+  } catch (error) {
+    return NextResponse.json(
+      { messgae: "Internal server error", error },
+      { status: 500 },
+    );
+  }
 }
 
 export async function POST(request: Request) {
