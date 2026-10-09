@@ -5,30 +5,29 @@ import {
   CreateAndEditTaskInput,
   GetTaskSchema,
   Task,
-  TaskSchema,
 } from "../types/task.schema";
 
+const BASE_URL = "/api/tasks";
+
 export const getTasks = async () => {
-  return await fetchHandler<Task[]>("/api/tasks").then((res) =>
+  return await fetchHandler<Task[]>(BASE_URL).then((res) =>
     z.array(GetTaskSchema).parse(res),
   );
 };
 
-export const getTasksByLearningPathId = async (learningPathId: string) => {
-  return fetchHandler<Task[]>(`/api/tasks/${learningPathId}`).then((res) =>
-    z.array(TaskSchema).parse(res),
-  );
+export const getTaskByUserId = async (userId: string) => {
+  return await fetchHandler<Task[]>(`${BASE_URL}/${userId}`);
 };
 
 export const createTask = (input: CreateAndEditTaskInput) => {
-  return fetchHandler<Task>("/api/tasks", {
+  return fetchHandler<Task>(BASE_URL, {
     method: "POST",
     body: JSON.stringify(input),
   });
 };
 
 export const deleteTask = (id: string) => {
-  return fetchHandler<void>(`/api/tasks/${id}`, {
+  return fetchHandler<void>(`${BASE_URL}/${id}`, {
     method: "DELETE",
   });
 };
@@ -40,7 +39,7 @@ export const updateTask = ({
   id: string;
   payload: Partial<Task>;
 }) => {
-  return fetchHandler<Task>(`/api/tasks/${id}`, {
+  return fetchHandler<Task>(`${BASE_URL}/${id}`, {
     method: "PATCH",
     body: JSON.stringify(payload),
   });

@@ -5,7 +5,7 @@ import {
   createTask,
   deleteTask,
   getTasks,
-  getTasksByLearningPathId,
+  getTaskByUserId,
 } from "../services/taskManagementServices";
 import { CreateAndEditTaskInput, Task } from "../types/task.schema";
 
@@ -22,11 +22,10 @@ export const useGetTasks = () => {
   });
 };
 
-export const useGetTasksByLearningPathId = (learningPathId: string) => {
+export const useGetTaskByUserId = (userId: string) => {
   return useQuery({
-    queryKey: ["tasks", learningPathId],
-    queryFn: () => getTasksByLearningPathId(learningPathId),
-    enabled: !!learningPathId,
+    queryKey: ["tasks", userId],
+    queryFn: () => getTaskByUserId(userId),
   });
 };
 
