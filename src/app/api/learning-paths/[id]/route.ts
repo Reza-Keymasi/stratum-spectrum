@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import connectToDB from "@/app/lib/db/connectToDB";
 import LearningPath from "@/shared/lib/models/learning-path.model";
-import { learningPathUpdateSchema } from "@/lib/validators/planner";
+import Task from "@/shared/lib/models/task.model";
 
 export async function GET(
   _: Request,
@@ -14,10 +14,12 @@ export async function GET(
     const { id: _id } = await params;
 
     const path = await LearningPath.findById(_id).lean();
+    const relatedTasks = await Task.find({ learningPath: _id });
 
     if (!path) throw Error("Learning path not found");
+    if (!relatedTasks) throw new Error("No tasks in this path yet");
 
-    return NextResponse.json(path);
+    return NextResponse.json({ path, tasks: relatedTasks });
   } catch (error) {
     return NextResponse.json(error);
   }
@@ -30,16 +32,12 @@ export async function PATCH(
   try {
     const { id } = await params;
     const body = await request.json();
-    const payload = learningPathUpdateSchema.parse(body);
+    // const payload = learningPathUpdateSchema.parse(body);
     await connectToDB();
-    const updatedLearningPath = await LearningPath.findByIdAndUpdate(
-      id,
-      payload,
-      {
-        new: true,
-        runValidators: true,
-      },
-    );
+    const updatedLearningPath = await LearningPath.findByIdAndUpdate(id, body, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!updatedLearningPath) {
       return NextResponse.json(
