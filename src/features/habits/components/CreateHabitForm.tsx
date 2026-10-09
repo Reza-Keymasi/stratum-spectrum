@@ -50,7 +50,6 @@ const CreateHabitForm = () => {
   const { mutate } = useCreateHabit();
 
   const handleSubmitHabit = (data: CreateHabitInput) => {
-    console.log(data);
     mutate(data, {
       onSuccess: () => {
         methods.reset();
