@@ -12,7 +12,6 @@ import {
 } from "@/features/task-management";
 import AppCard from "@/shared/ui/AppCard";
 import { useGetLearningPath } from "@/features/learning-path/hooks/useLearningPath";
-import { useGetTasksByLearningPathId } from "@/features/task-management/hooks/useTaskManagementQueries";
 import PathTasksTimeLine from "@/features/learning-path/components/PathTasksTimeLine";
 import SummaryEditor from "./SummaryEditor";
 import AppEmpty from "@/shared/ui/AppEmpty";
@@ -23,11 +22,12 @@ const LearningPathDetailsView = () => {
 
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
 
-  const { data: learningPathData, isPending } = useGetLearningPath(
+  const { data: learningPathDetails, isPending } = useGetLearningPath(
     params?.id as string,
   );
 
-  const { data: tasks } = useGetTasksByLearningPathId(params?.id as string);
+  const tasks = learningPathDetails?.tasks;
+  const path = learningPathDetails?.path;
 
   const completion = useMemo(() => {
     const allTasks = tasks ?? [];
@@ -55,7 +55,7 @@ const LearningPathDetailsView = () => {
     );
   }
 
-  if (!learningPathData) {
+  if (!path) {
     return <main className="mx-auto max-w-5xl p-6">Path not found.</main>;
   }
   return (
@@ -72,20 +72,20 @@ const LearningPathDetailsView = () => {
 
       <div className="flex justify-between gap-4">
         <AppCard
-          cardTitle={learningPathData?.title}
-          cardDescription={learningPathData?.topic}
+          cardTitle={path?.title}
+          cardDescription={path?.topic}
           cardClassName="w-2/5 h-fit shadow-none"
         >
           <div className="flex flex-col">
             <span className="capitalize">
               <i>deadline:</i>{" "}
-              {learningPathData?.targetDate
-                ? new Date(learningPathData?.targetDate).toLocaleDateString()
+              {path?.targetDate
+                ? new Date(path?.targetDate).toLocaleDateString()
                 : "Nothing"}
             </span>
             <span className="capitalize">
               {" "}
-              <i>difficulty:</i> {learningPathData?.difficulty}
+              <i>difficulty:</i> {path?.difficulty}
             </span>
           </div>
         </AppCard>
@@ -105,11 +105,11 @@ const LearningPathDetailsView = () => {
         </h3>
         <SummaryEditor
           learningPathId={String(params.id)}
-          initialSummary={learningPathData?.summary}
+          initialSummary={path?.summary}
         />
       </div>
 
-      <TaskOperationsModal learningPathId={learningPathData._id} />
+      <TaskOperationsModal learningPathId={path._id} />
     </main>
   );
 };

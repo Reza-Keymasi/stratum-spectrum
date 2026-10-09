@@ -4,6 +4,7 @@ import { fetchHandler } from "@/shared/lib/fetchHandler";
 import {
   CreateLearningPathInput,
   LearningPath,
+  LearningPathDetails,
   LearningPathSchema,
 } from "../types/path.schema";
 
@@ -16,7 +17,7 @@ export const getLearningPaths = async () => {
 };
 
 export const getLearningPath = (id: string) => {
-  return fetchHandler<LearningPath>(`${BASE_URL}/${id}`);
+  return fetchHandler<LearningPathDetails>(`${BASE_URL}/${id}`);
 };
 
 export const createLearningPath = (input: CreateLearningPathInput) => {

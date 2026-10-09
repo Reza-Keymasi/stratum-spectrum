@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { TaskSchema } from "@/features/task-management";
+
 export const DifficultySchema = z.enum(["easy", "medium", "hard"]);
 
 export type Difficulty = z.infer<typeof DifficultySchema>;
@@ -14,6 +16,11 @@ export const LearningPathSchema = z.object({
   progress: z.number().default(0),
 });
 
+export const LearningPathDetailsSchema = z.object({
+  path: LearningPathSchema,
+  tasks: z.array(TaskSchema),
+});
+
 export const CreateLearningPathSchema = LearningPathSchema.pick({
   title: true,
   topic: true,
@@ -23,3 +30,4 @@ export const CreateLearningPathSchema = LearningPathSchema.pick({
 
 export type LearningPath = z.infer<typeof LearningPathSchema>;
 export type CreateLearningPathInput = z.infer<typeof CreateLearningPathSchema>;
+export type LearningPathDetails = z.infer<typeof LearningPathDetailsSchema>;
