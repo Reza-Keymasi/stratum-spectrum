@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     if (existingUser) {
       return NextResponse.json(
         {
-          message: "An user with this email already exists",
+          message: "A user with this email already exists",
         },
         { status: 409 },
       );
@@ -47,14 +47,19 @@ export async function POST(req: Request) {
 
     const response = NextResponse.json(
       {
-        accessToken,
-        expiresIn: 900,
         user: newUser,
       },
       { status: 201 },
     );
 
-    setRefreshTokenCookie(refreshToken);
+    setRefreshTokenCookie(response, refreshToken);
+    response.cookies.set("access_token", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 900,
+    });
     return response;
   } catch (error) {
     console.log(error);
