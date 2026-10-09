@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { CircleCheckBig, PlusCircle } from "lucide-react";
 
@@ -93,7 +95,7 @@ const AddStepToTask = ({ selectedTask }: { selectedTask: Task }) => {
         ) : null}
 
         {selectedTask.steps?.length > 0 ? (
-          <ul className="space-y-2 h-[200px] overflow-y-auto">
+          <ul className="space-y-2 h-50 overflow-y-auto">
             {selectedTask.steps?.map((step, index) => (
               <li key={`${step.text} - ${index}`}>
                 <Button
