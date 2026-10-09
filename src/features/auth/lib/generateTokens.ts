@@ -1,13 +1,12 @@
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import { z } from "zod";
 
 const ACCESS_SECRET = process.env.JWT_ACCESS_SECRET!;
 const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 
 interface AccessTokenPayload {
   userId: string;
-  username: string;
+  username?: string;
   email: string;
   role: "user" | "admin";
 }

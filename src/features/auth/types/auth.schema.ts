@@ -22,6 +22,11 @@ export const SignUpSchema = z
     path: ["confirmPassword"],
   });
 
+export const LoginSchema = z.object({
+  email: z.email("Invalid email address"),
+  password: z.string().min(1, "Passwrod is required"),
+});
+
 export const UserSchema = z.object({
   username: z.string(),
   email: z.email(),
@@ -29,4 +34,5 @@ export const UserSchema = z.object({
 });
 
 export type SignUpInput = z.infer<typeof SignUpSchema>;
+export type LoginInput = z.infer<typeof LoginSchema>;
 export type User = z.infer<typeof UserSchema>;

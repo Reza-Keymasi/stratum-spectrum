@@ -1,18 +1,24 @@
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 const REFRESH_TOKEN_COOKIE = "refresh_token";
 
-const COOKIE_OPTIONS = {
+export const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   sameSite: "lax" as const,
-  path: "/api/auth",
+  path: "/",
   maxAge: 60 * 60 * 24 * 7,
 } as const;
 
-export async function setRefreshTokenCookie(token: string): Promise<void> {
-  const cookieStore = await cookies();
-  cookieStore.set(REFRESH_TOKEN_COOKIE, token, COOKIE_OPTIONS);
+export async function setRefreshTokenCookie(
+  response: NextResponse,
+  token: string,
+): Promise<void> {
+  response.cookies.set(REFRESH_TOKEN_COOKIE, token, {
+    ...COOKIE_OPTIONS,
+    maxAge: 60 * 60 * 24 * 7,
+  });
 }
 
 export async function getRefreshTokenFromCookie(): Promise<string | null> {
@@ -20,9 +26,10 @@ export async function getRefreshTokenFromCookie(): Promise<string | null> {
   return cookieStore.get(REFRESH_TOKEN_COOKIE)?.value ?? null;
 }
 
-export async function clearRefreshTokenCookie(): Promise<void> {
-  const cookieStore = await cookies();
-  cookieStore.set(REFRESH_TOKEN_COOKIE, "", {
+export async function clearRefreshTokenCookie(
+  response: NextResponse,
+): Promise<void> {
+  response.cookies.set(REFRESH_TOKEN_COOKIE, "", {
     ...COOKIE_OPTIONS,
     maxAge: 0,
   });

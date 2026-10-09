@@ -1,8 +1,8 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import mongoose, { Schema, model, models, Types } from "mongoose";
 
 interface IRefreshToken {
   token: string;
-  userId: mongoose.Types.ObjectId;
+  userId: Types.ObjectId;
   expiresAt: Date;
   isRevoked: boolean;
   replacedByToken?: string;
@@ -14,7 +14,7 @@ const RefreshTokenSchema = new Schema<IRefreshToken>(
   {
     token: { type: String, required: true, unique: true, index: true },
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
       index: true,
