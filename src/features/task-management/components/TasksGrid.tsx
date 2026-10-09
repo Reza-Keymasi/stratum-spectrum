@@ -89,6 +89,7 @@ const TasksGrid = () => {
                 task={task}
                 dragProps={getDragProps(task._id, status)}
                 isDragging={draggedId === task._id}
+                showPathTitle
                 isDraggable
               />
             ))}

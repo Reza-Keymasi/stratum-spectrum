@@ -27,6 +27,7 @@ interface DragProps {
 interface TaskCardProps {
   task: Task;
   showStatus?: boolean;
+  showPathTitle?: boolean;
   dragProps?: DragProps;
   isDragging?: boolean;
   isDraggable?: boolean;
@@ -35,6 +36,7 @@ interface TaskCardProps {
 const TaskCard = ({
   task,
   showStatus = false,
+  showPathTitle = false,
   dragProps,
   isDragging,
   isDraggable,
@@ -54,7 +56,7 @@ const TaskCard = ({
           <p className="px-2 py-1 rounded-md text-start bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/10 hover:text-indigo-500 text-ellipsis line-clamp-2">
             {task.title}
           </p>
-          {task?.learningPath ? (
+          {task?.learningPath && showPathTitle ? (
             <span className="text-xs bg-neutral-200 text-gray-600 text-ellipsis px-2 py-1 rounded-md line-clamp-2">
               path - {task.learningPath.title}
             </span>
