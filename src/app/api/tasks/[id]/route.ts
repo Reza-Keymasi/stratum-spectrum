@@ -4,21 +4,6 @@ import connectToDB from "@/app/lib/db/connectToDB";
 import Task from "@/shared/lib/models/task.model";
 import { TaskSchema } from "@/features/task-management/types/task.schema";
 
-export async function GET(
-  _: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
-  try {
-    await connectToDB();
-    const { id } = await params;
-
-    const tasks = await Task.find({ learningPath: id }).lean();
-    return NextResponse.json(tasks);
-  } catch (error) {
-    return NextResponse.json(error);
-  }
-}
-
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
