@@ -1,7 +1,7 @@
-import mongoose, { Schema, model, models, Types } from "mongoose";
+import { Schema, model, models, Types } from "mongoose";
 
 interface LearningPath {
-  tasks: Types.ObjectId[];
+  userId: Types.ObjectId;
   title: string;
   topic: string;
   summary?: string;
@@ -12,12 +12,7 @@ interface LearningPath {
 
 const learningPathSchema = new Schema<LearningPath>(
   {
-    tasks: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Task",
-      },
-    ],
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     title: {
       type: String,
       required: true,

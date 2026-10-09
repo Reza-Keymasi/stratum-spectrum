@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, Types } from "mongoose";
 
 const habitCategories = [
   "Health",
@@ -28,6 +28,7 @@ interface Frequency {
 }
 
 interface Habit {
+  userId: Types.ObjectId;
   title: string;
   description?: string;
   categories: HabitCategory[];
@@ -45,6 +46,7 @@ interface Habit {
 
 const HabitSchema = new Schema<Habit>(
   {
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     title: {
       type: String,
       required: true,

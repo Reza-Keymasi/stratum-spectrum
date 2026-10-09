@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, Types } from "mongoose";
 
 type DaysOfWeek = "sat" | "sun" | "mon" | "tue" | "wed" | "thu" | "fri";
 const DaysOfWeek = ["sat", "sun", "mon", "tue", "wed", "thu", "fri"] as const;
@@ -27,6 +27,7 @@ const DayEntrySchema = new Schema<DayEntry>(
 );
 
 const HabitEntrySchema = new Schema({
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   habitId: { type: Schema.Types.ObjectId, ref: "Habit", required: true },
   weekNumber: { type: Number, required: true, min: 1 },
   frequencyType: { type: String, enum: frequencyTypes, required: true },

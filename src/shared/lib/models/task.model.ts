@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models, Types } from "mongoose";
+import { Schema, model, models, Types } from "mongoose";
 
 interface Step {
   text: string;
@@ -6,6 +6,7 @@ interface Step {
 }
 
 interface Task {
+  userId: Types.ObjectId;
   title: string;
   description: string;
   status: "todo" | "in_progress" | "done";
@@ -33,6 +34,7 @@ const stepSchema = new Schema<Step>(
 
 const taskSchema = new Schema<Task>(
   {
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     title: {
       type: String,
       required: true,
@@ -65,7 +67,7 @@ const taskSchema = new Schema<Task>(
       default: [],
     },
     learningPath: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "LearningPath",
       default: null,
     },
