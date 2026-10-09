@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FormProvider, useForm } from "react-hook-form";
@@ -7,7 +9,6 @@ import FormInput from "@/shared/forms/FormInput";
 import { LoginInput, LoginSchema } from "../types/auth.schema";
 import { Button } from "@/components/ui/button";
 import { useLogin } from "../hooks/useAuthQueries";
-import { routerServerGlobal } from "next/dist/server/lib/router-utils/router-server-context";
 import { useAuthStore } from "../store/authStore";
 
 const LoginForm = () => {
@@ -26,7 +27,7 @@ const LoginForm = () => {
 
   const handleLogin = (data: LoginInput) => {
     mutate(data, {
-      onSuccess: () => router.push("/"),
+      onSuccess: (response) => router.push("/"),
     });
   };
   return (
