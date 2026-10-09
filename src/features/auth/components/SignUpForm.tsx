@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -36,6 +37,12 @@ const SignUpForm = () => {
             name="confirmPassword"
             placeholder="Confirm your password"
           />
+          <div className="flex gap-2">
+            <span>Already have an account?</span>
+            <Link href="/login" className="font-medium text-blue-500 underline">
+              Login
+            </Link>
+          </div>
         </div>
         <Button
           type="submit"
