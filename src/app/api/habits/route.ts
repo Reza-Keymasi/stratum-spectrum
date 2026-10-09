@@ -6,12 +6,15 @@ import { CreateHabitSchema } from "@/features/habits/types/habit.schema";
 import Habit from "@/shared/lib/models/habit.model";
 import HabitEntry from "@/shared/lib/models/habit-entry.model";
 import { buildInitialEntryData } from "@/features/habits/utils/utils";
+import { requireAuth } from "@/features/auth/lib/session";
 
 export async function GET() {
   try {
     await connectToDB();
 
-    const habits = await Habit.find().sort({ createdAt: -1 }).lean();
+    const { userId } = await requireAuth();
+
+    const habits = await Habit.find({ userId }).sort({ createdAt: -1 }).lean();
 
     return NextResponse.json(habits, { status: 200 });
   } catch (error) {
