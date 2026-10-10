@@ -44,3 +44,12 @@ export async function clearRefreshTokenCookie(
     maxAge: 0,
   });
 }
+
+export async function clearAccessTokenCookie(
+  response: NextResponse,
+): Promise<void> {
+  response.cookies.set(ACCESS_TOKEN_COOKIE, "", {
+    ...COOKIE_OPTIONS,
+    maxAge: 0,
+  });
+}
