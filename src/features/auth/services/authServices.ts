@@ -11,3 +11,7 @@ export const login = async (
 ): Promise<AxiosResponse<{ user: User; expiresIn: number }>> => {
   return axiosApiClient.post("/auth/login", input);
 };
+
+export const getMe = (): Promise<AxiosResponse<{ user: User }>> => {
+  return axiosApiClient.get("/auth/me");
+};
