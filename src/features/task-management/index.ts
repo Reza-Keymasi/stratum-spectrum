@@ -3,10 +3,13 @@ import TaskCard from "./components/TaskCard";
 import TaskOperationsModal from "./components/modals/TaskOperationsModal";
 import { Task } from "./types/task.schema";
 import { TaskSchema } from "./types/task.schema";
+import { useCreateTask } from "./hooks/useTaskManagementQueries";
 
-export { useCreateTask } from "./hooks/useTaskManagementQueries";
-export { TaskOperationsModal };
-export { CreateAndEditTaskForm };
-export { TaskCard };
-export { type Task };
-export { TaskSchema };
+export {
+  useCreateTask,
+  TaskOperationsModal,
+  CreateAndEditTaskForm,
+  TaskCard,
+  type Task,
+  TaskSchema,
+};
