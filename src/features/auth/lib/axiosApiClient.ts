@@ -7,13 +7,9 @@ export const axiosApiClient = axios.create({
 });
 
 const AUTH_ROUTES = ["/login", "/sing-up"];
+const NO_REFRESH_ROUTES = ["/auth/login", "/auth/sign-up", "/auth/refresh"];
 
-// axiosApiClient.interceptors.request.use((config) => {
-//   const accessToken = useAuthStore.getState().accessToken;
-//   if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
-
-//   return config;
-// });
+let refreshPromise: Promise<unknown> | null = null;
 
 axiosApiClient.interceptors.response.use(
   (response) => response,
@@ -23,19 +19,32 @@ axiosApiClient.interceptors.response.use(
     const isAuthRoute = AUTH_ROUTES.some((route) =>
       originalRequest?.url?.includes(route),
     );
+
+    const shouldSkip = NO_REFRESH_ROUTES.some((route) =>
+      originalRequest?.url?.includes(route),
+    );
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
-      !isAuthRoute
+      !isAuthRoute &&
+      !shouldSkip
     ) {
       originalRequest._retry = true;
 
       try {
-        await axiosApiClient.post("/auth/refresh");
+        refreshPromise ??= axiosApiClient
+          .post("/auth/refresh-token")
+          .finally(() => {
+            refreshPromise = null;
+          });
+        await refreshPromise;
         return axiosApiClient(originalRequest);
       } catch (refreshError) {
         useAuthStore.getState().clearAuth();
-        if (typeof window !== "undefined") window.location.href === "/login";
+        const onPublicPage = AUTH_ROUTES.some((p) =>
+          window.location.pathname.startsWith(p),
+        );
+        if (!onPublicPage) window.location.href === "/login";
         return Promise.reject(refreshError);
       }
     }
