@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
+const ACCESS_TOKEN_COOKIE = "access_token";
 const REFRESH_TOKEN_COOKIE = "refresh_token";
 
 export const COOKIE_OPTIONS = {
@@ -10,6 +11,15 @@ export const COOKIE_OPTIONS = {
   path: "/",
   maxAge: 60 * 60 * 24 * 7,
 } as const;
+
+export async function setAccessTokenCookie(
+  response: NextResponse,
+  token: string,
+): Promise<void> {
+  response.cookies.set(ACCESS_TOKEN_COOKIE, token, {
+    ...COOKIE_OPTIONS,
+  });
+}
 
 export async function setRefreshTokenCookie(
   response: NextResponse,
