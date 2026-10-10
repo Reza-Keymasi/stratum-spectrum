@@ -15,3 +15,7 @@ export const login = async (
 export const getMe = (): Promise<AxiosResponse<{ user: User }>> => {
   return axiosApiClient.get("/auth/me");
 };
+
+export const logout = () => {
+  return axiosApiClient.post("/auth/logout");
+};
