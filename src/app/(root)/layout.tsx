@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import MainLayout from "@/shared/layouts/MainLayout";
+import MainLayout from "@/layouts/MainLayout";
 
 export const metadata: Metadata = {
   title: "Personal Task Planner",

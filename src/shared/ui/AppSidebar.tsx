@@ -1,4 +1,5 @@
-import { ComponentProps } from "react";
+import Link from "next/link";
+import { ComponentProps, ReactNode } from "react";
 
 import {
   Trello,
@@ -21,6 +22,7 @@ import {
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
@@ -32,10 +34,13 @@ import {
   SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import Link from "next/link";
 import { ROUTES } from "../constants/routes";
 
-const AppSidebar = ({ ...props }: ComponentProps<typeof Sidebar>) => {
+type AppSidebarProps = ComponentProps<typeof Sidebar> & {
+  footer?: ReactNode;
+};
+
+const AppSidebar = ({ footer, ...props }: AppSidebarProps) => {
   const navItems = [
     {
       title: "Task Board",
@@ -154,7 +159,7 @@ const AppSidebar = ({ ...props }: ComponentProps<typeof Sidebar>) => {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-
+      {footer && <SidebarFooter>{footer}</SidebarFooter>}
       <SidebarRail />
     </Sidebar>
   );

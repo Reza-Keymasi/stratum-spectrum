@@ -1,13 +1,14 @@
 import { ReactNode } from "react";
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import AppSidebar from "../ui/AppSidebar";
+import AppSidebar from "../shared/ui/AppSidebar";
+import { LogoutBtn } from "@/features/auth";
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full">
-        <AppSidebar />
+        <AppSidebar footer={<LogoutBtn />} />
 
         <main className="flex-1">
           <div className="flex items-center gap-2 px-7 py-2">
