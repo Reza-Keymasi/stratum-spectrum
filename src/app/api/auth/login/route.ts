@@ -5,7 +5,10 @@ import User from "@/shared/lib/models/user.model";
 import { generateAccessToken } from "@/features/auth/lib/generateTokens";
 import { LoginSchema } from "@/features/auth/types/auth.schema";
 import { createRefreshToken } from "@/features/auth/services/tokenServices";
-import { setRefreshTokenCookie } from "@/shared/lib/cookieUtils";
+import {
+  setAccessTokenCookie,
+  setRefreshTokenCookie,
+} from "@/shared/lib/cookieUtils";
 
 export async function POST(req: NextResponse) {
   try {
@@ -42,13 +45,7 @@ export async function POST(req: NextResponse) {
       user: user.toJSON(),
     });
 
-    response.cookies.set("access_token", accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 900,
-    });
+    setAccessTokenCookie(response, accessToken);
 
     setRefreshTokenCookie(response, refreshToken);
 
