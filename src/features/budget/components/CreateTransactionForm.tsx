@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 
 import {
-  CATEGORIES_BY_TYPE,
   CreateTransactionInput,
   CreateTransactionSchema,
 } from "../types/budget.schema";
@@ -17,6 +16,7 @@ import { useCreateTransaction } from "../hooks/useBudgetQueries";
 import { today } from "@/lib/date";
 import { useTransactionFormPanelStore } from "../store/useTransactionFormPanelStore";
 import { cn } from "@/lib/utils";
+import { CATEGORIES_BY_TYPE } from "@/shared/constants/budget-transaction";
 
 const CreateTransactionForm = () => {
   const isOpen = useTransactionFormPanelStore((s) => s.isOpen);

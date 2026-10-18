@@ -1,27 +1,6 @@
 import { Schema, model, models, Types } from "mongoose";
 
-const SHARED_CATEGORIES = ["Financial Markets", "Other"] as const;
-
-const IncomeTransactionCategories = [
-  "Salary",
-  "Freelance",
-  "Reward",
-  ...SHARED_CATEGORIES,
-] as const;
-
-const ExpenseTransactionCategories = [
-  "Food",
-  "Rent",
-  "Transport",
-  "Bills",
-  "Entertainment",
-  ...SHARED_CATEGORIES,
-] as const;
-
-export const CATEGORIES_BY_TYPE = {
-  income: IncomeTransactionCategories,
-  expense: ExpenseTransactionCategories,
-} as const;
+import { CATEGORIES_BY_TYPE } from "@/shared/constants/budget-transaction";
 
 type TransactionType = keyof typeof CATEGORIES_BY_TYPE;
 

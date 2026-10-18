@@ -1,14 +1,6 @@
 import { z } from "zod";
 
-import {
-  ExpenseTransactionCategories,
-  IncomeTransactionCategories,
-} from "../constants";
-
-export const CATEGORIES_BY_TYPE = {
-  income: IncomeTransactionCategories,
-  expense: ExpenseTransactionCategories,
-} as const;
+import { CATEGORIES_BY_TYPE } from "@/shared/constants/budget-transaction";
 
 export const CreateTransactionSchema = z
   .object({

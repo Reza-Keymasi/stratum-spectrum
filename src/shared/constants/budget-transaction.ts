@@ -15,3 +15,8 @@ export const ExpenseTransactionCategories = [
   "Entertainment",
   ...SHARED_CATEGORIES,
 ] as const;
+
+export const CATEGORIES_BY_TYPE = {
+  income: IncomeTransactionCategories,
+  expense: ExpenseTransactionCategories,
+} as const;
