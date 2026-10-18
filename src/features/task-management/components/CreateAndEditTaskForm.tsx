@@ -63,7 +63,6 @@ const CreateAndEditTaskForm = ({
   const isPending = isCreateTaskPending || isEditTaskPending;
 
   const handleSubmitTask = (data: CreateAndEditTaskInput) => {
-    console.log(data);
     if (isEditMode) {
       editTask(
         { id: initialData?._id, payload: data },
