@@ -65,7 +65,7 @@ const AppToggleGroup = ({
           value={item}
           variant={variant}
           className={cn(
-            "capitalize rounded-md cursor-pointer data-[state=on]:bg-sky-500/30 hover:bg-sky-500/10",
+            "capitalize rounded-md cursor-pointer data-[state=on]:bg-green-500 data-[state=on]:text-white hover:bg-green-500/70 hover:text-white",
             itemClassName,
           )}
         >
