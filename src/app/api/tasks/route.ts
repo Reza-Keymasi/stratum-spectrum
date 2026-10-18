@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Types } from "mongoose";
 
 import connectToDB from "@/app/lib/db/connectToDB";
 import Task from "@/shared/lib/models/task.model";
@@ -26,12 +27,14 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     await connectToDB();
+    const { userId } = await requireAuth();
     const body = await request.json();
 
     const parsedBody = CreateAndEditTaskSchema.parse(body);
     const { learningPathId, ...taskData } = parsedBody;
     let task = await Task.create({
       ...taskData,
+      userId: new Types.ObjectId(userId),
       learningPath: learningPathId || null,
     });
 
