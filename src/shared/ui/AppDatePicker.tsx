@@ -10,12 +10,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 interface AppDatePickerProps {
   name: string;
   value?: Date | string | null;
   onChangeDate?: (date?: Date) => void;
   placeholder?: string;
+  className?: string;
 }
 
 export function AppDatePicker({
@@ -23,6 +25,7 @@ export function AppDatePicker({
   value,
   onChangeDate,
   placeholder = "Pick a date",
+  className = "",
 }: AppDatePickerProps) {
   const dateValue =
     typeof value === "string" ? parseISO(value) : (value ?? undefined);
@@ -33,7 +36,10 @@ export function AppDatePicker({
         <Button
           variant="outline"
           data-empty={!dateValue}
-          className="w-full justify-between text-left font-normal data-[empty=true]:text-muted-foreground border-none bg-gray-200/30 focus-visible:ring-0 focus-visible:bg-gray-200/50 py-6"
+          className={cn(
+            "w-full justify-between text-left font-normal data-[empty=true]:text-muted-foreground border-none bg-gray-200/30 focus-visible:ring-0 focus-visible:bg-gray-200/50 py-6",
+            className,
+          )}
         >
           {dateValue ? format(dateValue, "PPP") : <span>{placeholder}</span>}
           <ChevronDownIcon />
@@ -45,6 +51,11 @@ export function AppDatePicker({
           selected={dateValue}
           onSelect={onChangeDate}
           defaultMonth={dateValue}
+          className="font-mono gap-2"
+          classNames={{
+            day_button: "data-[selected-single=true]:bg-green-500! rounded-sm",
+            today: "bg-green-300 rounded-sm",
+          }}
         />
       </PopoverContent>
     </Popover>
