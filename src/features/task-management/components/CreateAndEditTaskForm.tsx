@@ -29,7 +29,7 @@ const PRIORITY_ITEMS = [
 ];
 const CATEGORIES = [
   { label: "planning", value: "planning" },
-  { label: "leaning", value: "leaning" },
+  { label: "learning", value: "learning" },
   { label: "personal", value: "personal" },
 ];
 
@@ -63,6 +63,7 @@ const CreateAndEditTaskForm = ({
   const isPending = isCreateTaskPending || isEditTaskPending;
 
   const handleSubmitTask = (data: CreateAndEditTaskInput) => {
+    console.log(data);
     if (isEditMode) {
       editTask(
         { id: initialData?._id, payload: data },
