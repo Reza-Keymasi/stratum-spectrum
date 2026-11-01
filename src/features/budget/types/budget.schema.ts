@@ -1,6 +1,9 @@
 import { z } from "zod";
 
-import { CATEGORIES_BY_TYPE } from "@/shared/constants/budget-transaction";
+import {
+  CATEGORIES_BY_TYPE,
+  ExpenseTransactionCategories,
+} from "@/shared/constants/budget-transaction";
 
 export const CreateTransactionSchema = z
   .object({
@@ -31,4 +34,22 @@ export const CreateTransactionSchema = z
     }
   });
 
+export const GetCategoryBudgetsSchema = z.object({
+  category: z.enum(ExpenseTransactionCategories),
+  limit: z.number().nullable(),
+  spent: z.number(),
+  percent: z.number().nullable(),
+});
+
+export const UpdateCategoryBudgetLimitSchema = z.object({
+  limit: z
+    .number()
+    .min(0, "Budget limit at least must be 0")
+    .max(1_000_000_000),
+});
+
 export type CreateTransactionInput = z.infer<typeof CreateTransactionSchema>;
+export type GetCategoryBudgets = z.infer<typeof GetCategoryBudgetsSchema>;
+export type UpdateCategoryBudgetLimitInput = z.infer<
+  typeof UpdateCategoryBudgetLimitSchema
+>;
