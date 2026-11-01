@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
-import ProgressBar from "@/shared/ui/ProgressBar";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+
 import CreateTransactionForm from "./CreateTransactionForm";
 import TransactionToggleButton from "./TransactionToggleButton";
+import CategoryBudget from "./CategoryBudget";
 
 const BudgetTransactionView = () => {
   return (
@@ -28,19 +28,19 @@ const BudgetTransactionView = () => {
       <div className="flex border border-gray-200 rounded-md mt-10">
         <div className="flex flex-1 flex-col gap-1 px-3 py-4 font-mono">
           <span className="text-xs text-gray-400 uppercase">income</span>
-          <span>$4,500</span>
+          <span className="text-green-accent-500">$4,500</span>
         </div>
         <div className="flex flex-1 flex-col gap-1 px-3 py-4 border-l font-mono">
           <span className="text-xs text-gray-400 uppercase">spent</span>
-          <span>$1,200</span>
+          <span className="text-green-accent-500">$1,200</span>
         </div>
         <div className="flex flex-1 flex-col gap-1 px-3 py-4 border-l font-mono">
           <span className="text-xs text-gray-400 uppercase">net</span>
-          <span>$3,300</span>
+          <span className="text-green-accent-500">$3,300</span>
         </div>
         <div className="flex flex-1 flex-col gap-1 px-3 py-4 border-l font-mono">
           <span className="text-xs text-gray-400 uppercase">budget used</span>
-          <span>26%</span>
+          <span className="text-green-accent-500">26%</span>
         </div>
       </div>
 
@@ -52,20 +52,8 @@ const BudgetTransactionView = () => {
         <span className="uppercase">
           category budgets · click a limit to edit
         </span>
-        <div className="border border-gray-200 rounded-md">
-          {Array.from({ length: 7 }, (_, i) => (
-            <div
-              className="flex justify-between items-center py-3 px-5"
-              key={i}
-            >
-              <span>Category</span>
-              <div className="w-1/2">
-                <ProgressBar value={50} />
-              </div>
-              <span>$1500 / $2300</span>
-            </div>
-          ))}
-        </div>
+
+        <CategoryBudget />
       </div>
 
       <div>List</div>
