@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 
 import connectToDB from "@/app/lib/db/connectToDB";
 import { requireAuth } from "@/features/auth/lib/session";
 import { CreateTransactionSchema } from "@/features/budget/types/budget.schema";
 import Budget from "@/shared/lib/models/budget.model";
 import { dayToUTCDate } from "@/lib/date";
+import CategoryBudget from "@/shared/lib/models/category-budget.model";
 
 export async function POST(request: Request) {
   const { userId } = await requireAuth();
@@ -14,32 +15,53 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
+  const body = await request.json();
+  const parsed = CreateTransactionSchema.safeParse(body);
+
+  if (!parsed.success) {
+    return NextResponse.json(
+      {
+        message: "Validation failed",
+        fields: parsed.error,
+      },
+      { status: 400 },
+    );
+  }
+  const { amount, transactionDate, ...rest } = parsed.data;
+  const owner = new Types.ObjectId(userId);
+
+  await connectToDB();
+  const session = await mongoose.startSession();
+
   try {
-    await connectToDB();
+    let transaction;
 
-    const body = await request.json();
-    const parsed = CreateTransactionSchema.safeParse(body);
-
-    if (!parsed.success) {
-      return NextResponse.json(
-        {
-          message: "Validation failed",
-          fields: parsed.error,
-        },
-        { status: 400 },
+    await session.withTransaction(async () => {
+      const [created] = await Budget.create(
+        [
+          {
+            ...rest,
+            userId: owner,
+            amount: Math.round(amount * 100) / 100,
+            transactionDate: dayToUTCDate(transactionDate),
+          },
+        ],
+        { session },
       );
-    }
 
-    const { amount, transactionDate, ...rest } = parsed.data;
+      transaction = created;
 
-    const payload = {
-      ...rest,
-      userId: new Types.ObjectId(userId),
-      amount: Math.round(amount * 100) / 100,
-      transactionDate: dayToUTCDate(transactionDate),
-    };
-
-    const transaction = await Budget.create(payload);
+      if (rest.type === "expense") {
+        await CategoryBudget.updateOne(
+          {
+            userId: owner,
+            category: rest.category,
+          },
+          { $setOnInsert: { limit: 0 } },
+          { upsert: true, session },
+        );
+      }
+    });
 
     return NextResponse.json(transaction, { status: 201 });
   } catch (error) {
