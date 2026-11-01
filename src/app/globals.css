@@ -68,6 +68,18 @@ body {
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Costum Colors */
+  --color-green-accent-100: #dcfce7;
+  --color-green-accent-200: #a7f3d0;
+  --color-green-accent-300: #6ee7b7;
+  --color-green-accent-400: #34d399;
+  --color-green-accent-500: #22c55e;
+  --color-green-accent-600: #16a34a;
+  --color-green-accent-700: #15803d;
+  --color-green-accent-800: #166534;
+  --color-green-accent-900: #14532d;
+  --color-green-accent-950: #052e16;
 }
 
 :root {
