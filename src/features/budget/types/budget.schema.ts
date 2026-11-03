@@ -48,8 +48,17 @@ export const UpdateCategoryBudgetLimitSchema = z.object({
     .max(1_000_000_000),
 });
 
+export const GetBudgetShortStatsSchema = z.object({
+  income: z.number(),
+  expense: z.number(),
+  net: z.number(),
+  totalLimit: z.number(),
+  budgetUsed: z.number().min(0).max(100),
+});
+
 export type CreateTransactionInput = z.infer<typeof CreateTransactionSchema>;
 export type GetCategoryBudgets = z.infer<typeof GetCategoryBudgetsSchema>;
 export type UpdateCategoryBudgetLimitInput = z.infer<
   typeof UpdateCategoryBudgetLimitSchema
 >;
+export type GetBudgetShortStats = z.infer<typeof GetBudgetShortStatsSchema>;
