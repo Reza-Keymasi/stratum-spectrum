@@ -46,6 +46,8 @@ export const UpdateCategoryBudgetLimitSchema = z.object({
     .number()
     .min(0, "Budget limit at least must be 0")
     .max(1_000_000_000),
+  year: z.number().int().min(2000).max(2100),
+  month: z.number().int().min(0).max(12),
 });
 
 export const GetBudgetShortStatsSchema = z.object({
