@@ -23,9 +23,15 @@ export const useCreateTransaction = () => {
 };
 
 export const useGetCategoryBudgets = (year?: number, month?: number) => {
+  const { apiParams } = usePeriod();
   return useQuery({
-    queryKey: ["category-budget"],
-    queryFn: () => getCategoryBudgets(year, month),
+    queryKey: ["category-budget", apiParams.year, apiParams.month],
+    queryFn: () => {
+      const queryString = new URLSearchParams(
+        Object.entries(apiParams).map(([key, value]) => [key, String(value)]),
+      ).toString();
+      return getCategoryBudgets(queryString);
+    },
   });
 };
 

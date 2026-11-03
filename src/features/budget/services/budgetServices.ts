@@ -13,13 +13,12 @@ export const createTransaction = (input: CreateTransactionInput) => {
 };
 
 export const getCategoryBudgets = (
-  year?: number,
-  month?: number,
+  queryString: string,
 ): Promise<GetCategoryBudgets[]> => {
   const response = axiosApiClient
     .get<
       GetCategoryBudgets[]
-    >(`${BASE_URL}/categories?year=${year}&month=${month}`)
+    >(`${BASE_URL}/categories${queryString ? `?${queryString}` : ""}`)
     .then((data) => data.data);
 
   return response;
