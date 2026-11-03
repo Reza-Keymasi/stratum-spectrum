@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { Types } from "mongoose";
 
 import { requireAuth } from "@/features/auth/lib/session";
-import { periodFilter } from "@/lib/date";
+import { monthKeyFrom, periodFilter } from "@/lib/date";
 import connectToDB from "@/app/lib/db/connectToDB";
 import Budget from "@/shared/lib/models/budget.model";
 import CategoryBudget from "@/shared/lib/models/category-budget.model";
@@ -29,6 +29,7 @@ export async function GET(req: Request) {
     );
   }
 
+  const monthKey = monthKeyFrom(searchParams);
   const owner = new Types.ObjectId(userId);
 
   try {
@@ -45,7 +46,7 @@ export async function GET(req: Request) {
         { $group: { _id: "$type", total: { $sum: "$amount" } } },
       ]),
       CategoryBudget.aggregate([
-        { $match: { userId: owner } },
+        { $match: { userId: owner, month: monthKey } },
         { $group: { _id: null, total: { $sum: "$limit" } } },
       ]),
     ]);

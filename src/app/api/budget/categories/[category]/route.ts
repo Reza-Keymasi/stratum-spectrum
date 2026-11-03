@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
+import { Types } from "mongoose";
 
 import { ExpenseTransactionCategories } from "@/shared/constants/budget-transaction";
 import connectToDB from "@/app/lib/db/connectToDB";
 import { requireAuth } from "@/features/auth/lib/session";
 import CategoryBudget from "@/shared/lib/models/category-budget.model";
+import { UpdateCategoryBudgetLimitSchema } from "@/features/budget/types/budget.schema";
+import { toMonthKey } from "@/lib/date";
 
 export async function PATCH(
   req: Request,
@@ -22,18 +25,34 @@ export async function PATCH(
   }
 
   const body = await req.json();
-  const { limit } = body;
+  const parsedBody = UpdateCategoryBudgetLimitSchema.safeParse(body);
+
+  if (!parsedBody.success) {
+    return NextResponse.json(
+      {
+        message: "Validation failed",
+        fields: parsedBody.error.flatten().fieldErrors,
+      },
+      { status: 400 },
+    );
+  }
+
+  const { limit, year, month } = parsedBody.data;
 
   try {
     await connectToDB();
 
-    await CategoryBudget.findOneAndUpdate(
-      { userId, category },
+    const updatedDoc = await CategoryBudget.findOneAndUpdate(
+      {
+        userId: new Types.ObjectId(userId),
+        category,
+        month: toMonthKey(year, month),
+      },
       { $set: { limit } },
       { upsert: true, new: true, runValidators: true },
     );
 
-    return NextResponse.json({ message: "Success" }, { status: 201 });
+    return NextResponse.json(updatedDoc, { status: 201 });
   } catch (error) {
     return NextResponse.json(
       { message: "Internal server error", error },

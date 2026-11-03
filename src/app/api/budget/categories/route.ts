@@ -5,7 +5,7 @@ import connectToDB from "@/app/lib/db/connectToDB";
 import Budget from "@/shared/lib/models/budget.model";
 import CategoryBudget from "@/shared/lib/models/category-budget.model";
 import { requireAuth } from "@/features/auth/lib/session";
-import { periodFilter } from "@/lib/date";
+import { monthKeyFrom, periodFilter } from "@/lib/date";
 import { ExpenseTransactionCategories } from "@/shared/constants/budget-transaction";
 
 export async function GET(req: Request) {
@@ -28,6 +28,7 @@ export async function GET(req: Request) {
     );
   }
 
+  const monthKey = monthKeyFrom(searchParams);
   const owner = new Types.ObjectId(userId);
 
   try {
@@ -39,13 +40,15 @@ export async function GET(req: Request) {
           $match: {
             userId: owner,
             type: "expense",
-            ...period
+            ...period,
           },
         },
         { $group: { _id: "$category", spent: { $sum: "$amount" } } },
       ]),
 
-      CategoryBudget.find({ userId: owner }).lean(),
+      monthKey
+        ? CategoryBudget.find({ userId: owner, month: monthKey }).lean()
+        : Promise.resolve([]),
     ]);
 
     const spentMap = new Map<string, number>(
