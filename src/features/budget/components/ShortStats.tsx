@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { useGetBudgetShortStats } from "../hooks/useBudgetQueries";
 
 const formatNumber = (num: number | null) => {
-  return typeof num === "number" ? num.toLocaleString("en-US") : "_";
+  return typeof num === "number" ? num.toLocaleString("en-US") : "0";
 };
 
 const ShortStats = () => {
