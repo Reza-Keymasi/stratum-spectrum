@@ -6,9 +6,11 @@ import {
 } from "../types/budget.schema";
 import {
   createTransaction,
+  getBudgetShortStats,
   getCategoryBudgets,
   updateCategoryBudgetLimit,
 } from "../services/budgetServices";
+import { usePeriod } from "./usePeriod";
 
 export const useCreateTransaction = () => {
   const queryClient = useQueryClient();
@@ -34,5 +36,19 @@ export const useUpdateCategoryBudgetLimit = (category: string) => {
       updateCategoryBudgetLimit(category, input),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ["category-budget"] }),
+  });
+};
+
+export const useGetBudgetShortStats = () => {
+  const { apiParams } = usePeriod();
+  return useQuery({
+    queryKey: ["short-stats", apiParams.year, apiParams.month],
+    queryFn: () => {
+      const queryString = new URLSearchParams(
+        Object.entries(apiParams).map(([key, value]) => [key, String(value)]),
+      ).toString();
+
+      return getBudgetShortStats(queryString);
+    },
   });
 };
