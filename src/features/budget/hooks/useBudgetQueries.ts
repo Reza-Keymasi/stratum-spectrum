@@ -17,8 +17,10 @@ export const useCreateTransaction = () => {
   return useMutation({
     mutationFn: (input: CreateTransactionInput) => createTransaction(input),
 
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["category-budget"] }),
+    onSuccess: () => {
+      (queryClient.invalidateQueries({ queryKey: ["category-budget"] }),
+        queryClient.invalidateQueries({ queryKey: ["short-stats"] }));
+    },
   });
 };
 
@@ -37,11 +39,18 @@ export const useGetCategoryBudgets = (year?: number, month?: number) => {
 
 export const useUpdateCategoryBudgetLimit = (category: string) => {
   const queryClient = useQueryClient();
+  const { year, month } = usePeriod();
   return useMutation({
     mutationFn: (input: UpdateCategoryBudgetLimitInput) =>
-      updateCategoryBudgetLimit(category, input),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["category-budget"] }),
+      updateCategoryBudgetLimit(category, { limit: input.limit, year, month }),
+    onSuccess: () => {
+      (queryClient.invalidateQueries({
+        queryKey: ["category-budget", year, month],
+      }),
+        queryClient.invalidateQueries({
+          queryKey: ["short-stats", year, month],
+        }));
+    },
   });
 };
 
