@@ -5,9 +5,10 @@ import { useMemo } from "react";
 import { useGetCategoryBudgets } from "../hooks/useBudgetQueries";
 import { ExpenseTransactionCategories } from "@/shared/constants/budget-transaction";
 import CategoryBudgetRow from "./CategoryBudgetRow";
+import CategoryBudgetSkeleton from "./skeletons/CategoryBudgetSkeleton";
 
 const CategoryBudget = () => {
-  const { data } = useGetCategoryBudgets();
+  const { data, isPending } = useGetCategoryBudgets();
 
   const rows = useMemo(() => {
     const byCategory = new Map(data?.map((row) => [row.category, row]));
@@ -25,6 +26,8 @@ const CategoryBudget = () => {
       };
     });
   }, [data]);
+
+  if (isPending) return <CategoryBudgetSkeleton />;
 
   return (
     <div className="border border-gray-200 rounded-md">

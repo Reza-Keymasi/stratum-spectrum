@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { useGetBudgetShortStats } from "../hooks/useBudgetQueries";
+import ShortStatsSkeleton from "./skeletons/ShortStatsSkeleton";
 
 const formatNumber = (num: number | null) => {
   return typeof num === "number" ? num.toLocaleString("en-US") : "0";
@@ -9,8 +10,7 @@ const formatNumber = (num: number | null) => {
 
 const ShortStats = () => {
   const { data: stats, isPending } = useGetBudgetShortStats();
-  if (isPending) return <div>Loading...</div>;
-  if (!stats) return;
+  if (isPending) return <ShortStatsSkeleton />;
 
   const statsArr = [
     {
