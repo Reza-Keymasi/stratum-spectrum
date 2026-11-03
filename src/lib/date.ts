@@ -49,3 +49,26 @@ export const periodFilter = (searchParams: URLSearchParams) => {
 
   return { transactionDate: { $gte: start, $lt: end } };
 };
+
+// Month helpers
+
+export const toMonthKey = (year: number, month: number) => {
+  return `${year}-${String(month).padStart(2, "0")}`;
+};
+
+export const monthKeyFrom = (searchParams: URLSearchParams) => {
+  const year = Number(searchParams.get("year"));
+  const month = Number(searchParams.get("month"));
+
+  const valid =
+    searchParams.has("year") &&
+    searchParams.has("month") &&
+    Number.isInteger(year) &&
+    year >= 2000 &&
+    year <= 2100 &&
+    Number.isInteger(month) &&
+    month >= 0 &&
+    month <= 12;
+
+  return valid ? toMonthKey(year, month) : null;
+};
