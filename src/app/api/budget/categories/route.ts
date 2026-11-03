@@ -5,7 +5,7 @@ import connectToDB from "@/app/lib/db/connectToDB";
 import Budget from "@/shared/lib/models/budget.model";
 import CategoryBudget from "@/shared/lib/models/category-budget.model";
 import { requireAuth } from "@/features/auth/lib/session";
-import { monthRange } from "@/lib/date";
+import { periodFilter } from "@/lib/date";
 import { ExpenseTransactionCategories } from "@/shared/constants/budget-transaction";
 
 export async function GET(req: Request) {
@@ -17,14 +17,18 @@ export async function GET(req: Request) {
 
   const { searchParams } = new URL(req.url);
 
-  const now = new Date();
-  const parsedDate = {
-    year: Number(searchParams.get("year")) ?? now.getFullYear(),
-    month: Number(searchParams.get("month")) ?? now.getMonth() + 1,
-  };
+  const period = periodFilter(searchParams);
+
+  if (period === null) {
+    return NextResponse.json(
+      {
+        message: "Invalid query",
+      },
+      { status: 400 },
+    );
+  }
 
   const owner = new Types.ObjectId(userId);
-  const { start, end } = monthRange(parsedDate.year, parsedDate.month);
 
   try {
     await connectToDB();
@@ -35,7 +39,7 @@ export async function GET(req: Request) {
           $match: {
             userId: owner,
             type: "expense",
-            // transactionDate: { $gte: start, $lt: end },
+            ...period
           },
         },
         { $group: { _id: "$category", spent: { $sum: "$amount" } } },
