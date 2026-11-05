@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
 const CategoryBudgetSkeleton = () => {
-  const skeletonRows = Array.from({ length: 5 });
+  const skeletonRows = Array.from({ length: 7 });
 
   return (
     <div className="border border-gray-200 rounded-md divide-y divide-gray-100">
