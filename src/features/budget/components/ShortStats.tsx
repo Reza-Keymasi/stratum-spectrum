@@ -3,10 +3,7 @@
 import { cn } from "@/lib/utils";
 import { useGetBudgetShortStats } from "../hooks/useBudgetQueries";
 import ShortStatsSkeleton from "./skeletons/ShortStatsSkeleton";
-
-const formatNumber = (num: number | null) => {
-  return typeof num === "number" ? num.toLocaleString("en-US") : "0";
-};
+import { formatNumber } from "../utils/utils";
 
 const ShortStats = () => {
   const { data: stats, isPending } = useGetBudgetShortStats();
