@@ -5,8 +5,46 @@ import connectToDB from "@/app/lib/db/connectToDB";
 import { requireAuth } from "@/features/auth/lib/session";
 import { CreateTransactionSchema } from "@/features/budget/types/budget.schema";
 import Budget from "@/shared/lib/models/budget.model";
-import { dayToUTCDate } from "@/lib/date";
+import { dayToUTCDate, periodFilter } from "@/lib/date";
 import CategoryBudget from "@/shared/lib/models/category-budget.model";
+
+export async function GET(req: Request) {
+  const { userId } = await requireAuth();
+
+  if (!userId) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  const { searchParams } = new URL(req.url);
+
+  const period = periodFilter(searchParams);
+  if (period === null) {
+    return NextResponse.json({ message: "Invalid query" }, { status: 500 });
+  }
+
+  const type = searchParams.get("type");
+  const typeFilter = type === "income" || type === "expense" ? { type } : {};
+
+  const owner = new Types.ObjectId(userId);
+
+  try {
+    await connectToDB();
+
+    const budgets = await Budget.find({
+      userId: owner,
+      ...period,
+      ...typeFilter,
+    }).lean();
+
+    return NextResponse.json(budgets, { status: 200 });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { message: "Internal server error", error },
+      { status: 500 },
+    );
+  }
+}
 
 export async function POST(request: Request) {
   const { userId } = await requireAuth();
