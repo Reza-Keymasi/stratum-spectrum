@@ -7,4 +7,5 @@ export const ROUTES = {
   LEARNING_PATH: (id: string) => `/learning-paths/${id}`,
   HABITS_NEW: "/habits/new",
   HABITS_LIST: "/habits/list",
+  BUDGET_TRACKER: "/budget",
 };

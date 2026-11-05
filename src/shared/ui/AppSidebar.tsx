@@ -1,5 +1,9 @@
-import Link from "next/link";
+"use client";
+
 import { ComponentProps, ReactNode } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 import {
   Trello,
@@ -11,6 +15,7 @@ import {
   Sparkles,
   ClockPlus,
   ListRestart,
+  Landmark,
 } from "lucide-react";
 
 import {
@@ -35,12 +40,14 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { ROUTES } from "../constants/routes";
+import { cn } from "@/lib/utils";
 
 type AppSidebarProps = ComponentProps<typeof Sidebar> & {
   footer?: ReactNode;
 };
 
 const AppSidebar = ({ footer, ...props }: AppSidebarProps) => {
+  const pathname = usePathname();
   const navItems = [
     {
       title: "Task Board",
@@ -51,6 +58,11 @@ const AppSidebar = ({ footer, ...props }: AppSidebarProps) => {
       title: "Learning Path",
       url: ROUTES.LEARNING_PATHS,
       icon: GraduationCap,
+    },
+    {
+      title: "Budget Tracker",
+      icon: Landmark,
+      url: ROUTES.BUDGET_TRACKER,
     },
     {
       title: "Habit Tracker",
@@ -90,24 +102,47 @@ const AppSidebar = ({ footer, ...props }: AppSidebarProps) => {
     },
   ];
   return (
-    <Sidebar collapsible="icon" variant="floating" {...props}>
+    <Sidebar
+      collapsible="icon"
+      variant="floating"
+      className="font-mono text-[#0F172A]"
+      {...props}
+    >
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="border rounded-md border-gray-300 px-3 py-2">
-            Stratum Spectrum
+          <SidebarGroupLabel className="flex gap-2 items-center my-3">
+            <Image src="/logo.svg" alt="logo" width={58} height={58} />
+            <div className="flex flex-col text-[#0F172A]">
+              <span className="font-bold">Stratum</span>
+              <span>Spectrum</span>
+            </div>
           </SidebarGroupLabel>
           <SidebarMenu>
             {navItems.map((item) => {
+              const hasActiveSubItem = item.subItems?.some(
+                (sub) => sub.url === pathname,
+              );
+
+              const isActive = item.url === pathname || hasActiveSubItem;
+
               if (item.subItems) {
                 return (
                   <Collapsible
                     key={item.title}
                     asChild
-                    defaultOpen={item.isActive}
+                    defaultOpen={isActive}
                     className="group/collapsible"
                   >
                     <SidebarMenuItem>
-                      <CollapsibleTrigger asChild>
+                      <CollapsibleTrigger
+                        asChild
+                        className={cn(
+                          "cursor-pointer",
+                          isActive
+                            ? "text-green-accent-600 hover:text-green-accent-600"
+                            : "",
+                        )}
+                      >
                         <SidebarMenuButton tooltip={item.title}>
                           {item.icon && <item.icon />}
                           <span>{item.title}</span>
@@ -142,7 +177,15 @@ const AppSidebar = ({ footer, ...props }: AppSidebarProps) => {
 
               return (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild tooltip={item.title}>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip={item.title}
+                    className={cn(
+                      isActive
+                        ? "text-green-accent-600 hover:text-green-accent-600"
+                        : "",
+                    )}
+                  >
                     <Link href={item.url}>
                       {item.icon && <item.icon />}
                       <span>{item.title}</span>
