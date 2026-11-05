@@ -8,9 +8,12 @@ import {
   createTransaction,
   getBudgetShortStats,
   getCategoryBudgets,
+  getTransactions,
   updateCategoryBudgetLimit,
 } from "../services/budgetServices";
 import { usePeriod } from "./usePeriod";
+import { useSwitchTransactionType } from "./useSwitchTransactionType";
+import { toQueryString } from "@/lib/query";
 
 export const useCreateTransaction = () => {
   const queryClient = useQueryClient();
@@ -19,7 +22,20 @@ export const useCreateTransaction = () => {
 
     onSuccess: () => {
       (queryClient.invalidateQueries({ queryKey: ["category-budget"] }),
-        queryClient.invalidateQueries({ queryKey: ["short-stats"] }));
+        queryClient.invalidateQueries({ queryKey: ["short-stats"] }),
+        queryClient.invalidateQueries({ queryKey: ["transactions"] }));
+    },
+  });
+};
+
+export const useGetTransactions = () => {
+  const { typeApiParams } = useSwitchTransactionType();
+  const { apiParams } = usePeriod();
+  const params = { ...apiParams, ...typeApiParams };
+  return useQuery({
+    queryKey: ["transactions", params],
+    queryFn: () => {
+      return getTransactions(toQueryString(params));
     },
   });
 };
@@ -29,10 +45,7 @@ export const useGetCategoryBudgets = (year?: number, month?: number) => {
   return useQuery({
     queryKey: ["category-budget", apiParams.year, apiParams.month],
     queryFn: () => {
-      const queryString = new URLSearchParams(
-        Object.entries(apiParams).map(([key, value]) => [key, String(value)]),
-      ).toString();
-      return getCategoryBudgets(queryString);
+      return getCategoryBudgets(toQueryString(apiParams));
     },
   });
 };
