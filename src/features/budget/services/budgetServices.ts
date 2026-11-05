@@ -3,6 +3,7 @@ import {
   CreateTransactionInput,
   GetBudgetShortStats,
   GetCategoryBudgets,
+  GetTransactions,
   UpdateCategoryBudgetLimitInput,
 } from "../types/budget.schema";
 
@@ -12,13 +13,21 @@ export const createTransaction = (input: CreateTransactionInput) => {
   return axiosApiClient.post(BASE_URL, input);
 };
 
+export const getTransactions = (
+  queryString?: string,
+): Promise<GetTransactions[]> => {
+  const response = axiosApiClient
+    .get(`${BASE_URL}${queryString ?? ""}`)
+    .then((data) => data.data);
+
+  return response;
+};
+
 export const getCategoryBudgets = (
   queryString: string,
 ): Promise<GetCategoryBudgets[]> => {
   const response = axiosApiClient
-    .get<
-      GetCategoryBudgets[]
-    >(`${BASE_URL}/categories${queryString ? `?${queryString}` : ""}`)
+    .get<GetCategoryBudgets[]>(`${BASE_URL}/categories${queryString ?? ""}`)
     .then((data) => data.data);
 
   return response;
