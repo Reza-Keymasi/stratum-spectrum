@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   CATEGORIES_BY_TYPE,
   ExpenseTransactionCategories,
+  AllTransactionsCategories,
 } from "@/shared/constants/budget-transaction";
 
 export const CreateTransactionSchema = z
@@ -34,6 +35,18 @@ export const CreateTransactionSchema = z
     }
   });
 
+export const GetTransactionsSchema = z.object({
+  _id: z.string().min(0),
+  title: z.string(),
+  amount: z.number().min(0),
+  type: z.enum(["income", "expense"]),
+  category: z.enum(AllTransactionsCategories),
+  transactionDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .refine((v) => !Number.isNaN(Date.parse(v)), "Invalid date"),
+});
+
 export const GetCategoryBudgetsSchema = z.object({
   category: z.enum(ExpenseTransactionCategories),
   limit: z.number().nullable(),
@@ -59,6 +72,7 @@ export const GetBudgetShortStatsSchema = z.object({
 });
 
 export type CreateTransactionInput = z.infer<typeof CreateTransactionSchema>;
+export type GetTransactions = z.infer<typeof GetTransactionsSchema>;
 export type GetCategoryBudgets = z.infer<typeof GetCategoryBudgetsSchema>;
 export type UpdateCategoryBudgetLimitInput = z.infer<
   typeof UpdateCategoryBudgetLimitSchema
