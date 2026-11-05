@@ -1,10 +1,9 @@
-"use client";
-
 import CreateTransactionForm from "./CreateTransactionForm";
 import TransactionToggleButton from "./TransactionToggleButton";
 import CategoryBudget from "./CategoryBudget";
 import ShortStats from "./ShortStats";
 import PeriodSwitcher from "./PeriodSwitcher";
+import TransactionsList from "./TransactionsList";
 
 const BudgetTransactionView = () => {
   return (
@@ -37,7 +36,7 @@ const BudgetTransactionView = () => {
         <CategoryBudget />
       </div>
 
-      <div>List</div>
+      <TransactionsList />
     </div>
   );
 };
