@@ -1,11 +1,7 @@
 import { z } from "zod";
 
 import { fetchHandler } from "@/shared/lib/fetchHandler";
-import {
-  CreateAndEditTaskInput,
-  GetTaskSchema,
-  Task,
-} from "../types/task.schema";
+import { CreateTaskInput, GetTaskSchema, Task } from "../types/task.schema";
 
 const BASE_URL = "/api/tasks";
 
@@ -19,7 +15,7 @@ export const getTaskByUserId = async (userId: string) => {
   return await fetchHandler<Task[]>(`${BASE_URL}/${userId}`);
 };
 
-export const createTask = (input: CreateAndEditTaskInput) => {
+export const createTask = (input: CreateTaskInput) => {
   return fetchHandler<Task>(BASE_URL, {
     method: "POST",
     body: JSON.stringify(input),

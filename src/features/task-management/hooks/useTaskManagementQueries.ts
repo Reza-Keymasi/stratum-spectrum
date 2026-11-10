@@ -7,7 +7,7 @@ import {
   getTasks,
   getTaskByUserId,
 } from "../services/taskManagementServices";
-import { CreateAndEditTaskInput, Task } from "../types/task.schema";
+import { CreateTaskInput, Task } from "../types/task.schema";
 
 const taskKeys = {
   all: ["tasks"] as const,
@@ -32,7 +32,7 @@ export const useGetTaskByUserId = (userId: string) => {
 export const useCreateTask = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: CreateAndEditTaskInput) => createTask(input),
+    mutationFn: (input: CreateTaskInput) => createTask(input),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
   });
 };
