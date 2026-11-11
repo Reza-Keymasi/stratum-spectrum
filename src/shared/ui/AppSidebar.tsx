@@ -4,6 +4,7 @@ import { ComponentProps, ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { useSelectedLayoutSegments } from "next/navigation";
 
 import {
   Trello,
@@ -16,6 +17,12 @@ import {
   ClockPlus,
   ListRestart,
   Landmark,
+  HardDrive,
+  Sun,
+  TriangleAlert,
+  CalendarArrowUp,
+  Star,
+  CheckCircle,
 } from "lucide-react";
 
 import {
@@ -48,11 +55,52 @@ type AppSidebarProps = ComponentProps<typeof Sidebar> & {
 
 const AppSidebar = ({ footer, ...props }: AppSidebarProps) => {
   const pathname = usePathname();
+  const segments = useSelectedLayoutSegments();
+  const view = segments.at(-1) ?? "overview";
+  const isActive = (key: string) => segments.join("/").startsWith(key);
+
   const navItems = [
     {
-      title: "Task Board",
-      url: ROUTES.TASKS,
+      title: "Task Management",
       icon: Trello,
+      subItems: [
+        {
+          title: "All tasks",
+          url: ROUTES.TASKS("all", view),
+          icon: HardDrive,
+          isActive,
+        },
+        {
+          title: "Today",
+          url: ROUTES.TASKS("today", view),
+          icon: Sun,
+          isActive,
+        },
+        {
+          title: "Upcoming",
+          url: ROUTES.TASKS("upcoming", view),
+          icon: CalendarArrowUp,
+          isActive,
+        },
+        {
+          title: "Overdue",
+          url: ROUTES.TASKS("overdue", view),
+          icon: TriangleAlert,
+          isActive,
+        },
+        {
+          title: "Starred",
+          url: ROUTES.TASKS("starred", view),
+          icon: Star,
+          isActive,
+        },
+        {
+          title: "Completed",
+          url: ROUTES.TASKS("completed", view),
+          icon: CheckCircle,
+          isActive,
+        },
+      ],
     },
     {
       title: "Learning Path",
@@ -73,11 +121,13 @@ const AppSidebar = ({ footer, ...props }: AppSidebarProps) => {
           title: "New Habit",
           url: ROUTES.HABITS_NEW,
           icon: ClockPlus,
+          isActive,
         },
         {
           title: "Habits List",
           url: ROUTES.HABITS_LIST,
           icon: ListRestart,
+          isActive,
         },
       ],
     },
@@ -91,12 +141,14 @@ const AppSidebar = ({ footer, ...props }: AppSidebarProps) => {
           title: "Dictionary",
           url: ROUTES.DICTIONARY,
           icon: BookOpen,
+          isActive,
         },
         {
           title: "Leitner Box",
           url: ROUTES.LEITNER,
           icon: Sparkles,
           isComingSoon: true,
+          isActive,
         },
       ],
     },
