@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ReactNode } from "react";
 
 const AuthLayout = ({ children }: { children: ReactNode }) => {
@@ -12,12 +13,14 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
 
         {/* Brand */}
         <div className="flex items-center gap-3 relative z-10">
-          <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center">
+          <div className="w-16 h-16 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center">
             {/* Logo */}
+            <Image src="/logo.svg" alt="logo" width={58} height={58} />
           </div>
-          <span className="text-white/90 font-medium text-sm tracking-tight">
-            Acme
-          </span>
+          <div className="flex flex-col text-white">
+            <span className="font-bold">Stratum</span>
+            <span>Spectrum</span>
+          </div>
         </div>
 
         {/* Quote */}
