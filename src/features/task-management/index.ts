@@ -4,6 +4,7 @@ import TaskOperationsModal from "./components/modals/TaskOperationsModal";
 import { Task } from "./types/task.schema";
 import { TaskSchema } from "./types/task.schema";
 import { useCreateTask } from "./hooks/useTaskManagementQueries";
+import { SMART, VIEWS, Filters } from "./lib/url";
 
 export {
   useCreateTask,
@@ -12,4 +13,7 @@ export {
   TaskCard,
   type Task,
   TaskSchema,
+  SMART,
+  VIEWS,
+  Filters,
 };
