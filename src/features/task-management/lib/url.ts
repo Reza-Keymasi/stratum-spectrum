@@ -7,11 +7,11 @@ export const SMART = [
   "upcoming",
   "overdue",
   "starred",
-  "done",
+  "completed",
 ] as const;
 
 export type Scope =
-  | { kind: "smart"; id: (typeof SMART)[number] }
+  | { kind: "smart"; slug: (typeof SMART)[number] }
   | { kind: "project"; id: string }
   | { kind: "label"; id: string };
 
@@ -19,8 +19,25 @@ export type View = (typeof VIEWS)[number];
 
 export const scopeHref = (scope: Scope, view = "list") =>
   scope.kind === "smart"
-    ? `/tasks/${scope.id}/${view}`
+    ? `/tasks/${scope.slug}/${view}`
     : `/tasks/${scope.kind}/${scope.id}/${view}`;
+
+export const scopeToQuery = (scope: Scope) =>
+  new URLSearchParams({
+    scope: scope.kind === "smart" ? scope.slug : `${scope.kind}:${scope.id}`,
+  }).toString();
+
+export const parseScope = (raw: string | null): Scope | null => {
+  if (!raw) return { kind: "smart", slug: "all" };
+
+  const [head, id] = raw.split(":");
+  if (head === "project") return { kind: "project", id };
+  if (head === "label") return { kind: "label", id };
+
+  return (SMART as readonly string[]).includes(head)
+    ? { kind: "smart", slug: head as (typeof SMART)[number] }
+    : null;
+};
 
 export const Filters = z.object({
   query: z.string().trim().max(100).optional(),
