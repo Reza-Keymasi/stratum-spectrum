@@ -1,5 +1,5 @@
-import TasksView from "@/features/task-management/components/TasksView";
+import { redirect } from "next/navigation";
 
 export default function TaskManagementPage() {
-  return <TasksView />;
+  return redirect("/tasks/all/overview");
 }
