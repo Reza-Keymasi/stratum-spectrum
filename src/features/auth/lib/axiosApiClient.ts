@@ -1,8 +1,20 @@
 import axios from "axios";
 import { useAuthStore } from "../store/authStore";
 
+const getBaseUrl = () => {
+  if (typeof window !== "undefined") {
+    return "/api";
+  }
+
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return `${process.env.NEXT_PUBLIC_API_URL}/api`;
+  }
+
+  return `http://localhost:${process.env.PORT || 3000}/api`;
+};
+
 export const axiosApiClient = axios.create({
-  baseURL: "/api",
+  baseURL: getBaseUrl(),
   withCredentials: true,
 });
 
