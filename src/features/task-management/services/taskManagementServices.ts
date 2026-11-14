@@ -1,14 +1,17 @@
 import { z } from "zod";
 
 import { fetchHandler } from "@/shared/lib/fetchHandler";
-import { CreateTaskInput, GetTaskSchema, Task } from "../types/task.schema";
+import { CreateTaskInput, GetTasksStats, Task } from "../types/task.schema";
+import { axiosApiClient } from "@/features/auth/lib/axiosApiClient";
 
-const BASE_URL = "/api/tasks";
+const BASE_URL = "/tasks";
 
-export const getTasks = async () => {
-  return await fetchHandler<Task[]>(BASE_URL).then((res) =>
-    z.array(GetTaskSchema).parse(res),
-  );
+export const getTasks = () => {
+  const response = axiosApiClient
+    .get<Task[]>(BASE_URL)
+    .then((data) => data.data);
+
+  return response;
 };
 
 export const getTaskByUserId = async (userId: string) => {
@@ -39,4 +42,12 @@ export const updateTask = ({
     method: "PATCH",
     body: JSON.stringify(payload),
   });
+};
+
+export const getTasksStats = (scopeQuery: string): Promise<GetTasksStats> => {
+  const response = axiosApiClient
+    .get<GetTasksStats>(`${BASE_URL}/stats?${scopeQuery}`)
+    .then((data) => data.data);
+
+  return response;
 };
