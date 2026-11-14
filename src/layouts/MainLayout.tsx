@@ -7,10 +7,10 @@ import { LogoutBtn } from "@/features/auth";
 const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
+      <div className="flex min-h-screen w-full bg-green-50">
         <AppSidebar footer={<LogoutBtn />} />
 
-        <main className="flex-1">
+        <main className="flex-1 bg-green-50">
           <div className="flex items-center gap-2 px-7 py-2">
             <SidebarTrigger className="-ml-1" />
           </div>
