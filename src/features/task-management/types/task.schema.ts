@@ -4,6 +4,18 @@ export const TaskStatusEnum = z.enum(["todo", "in_progress", "review", "done"]);
 export const TaskPriorityEnum = z.enum(["low", "medium", "high"]);
 export const TaskCategoryEnum = z.enum(["planning", "learning", "personal"]);
 
+export const StatsKeys = [
+  "open",
+  "todo",
+  "inProgress",
+  "done",
+  "overdue",
+  "dueToday",
+  "doneThisWeek",
+  "byPriority",
+  "preProject",
+] as const;
+
 export type TaskStatus = z.infer<typeof TaskStatusEnum>;
 export type TaskPriority = z.infer<typeof TaskPriorityEnum>;
 export type TaskCategory = z.infer<typeof TaskCategoryEnum>;
@@ -54,6 +66,27 @@ export const GetTaskSchema = TaskSchema.omit({ learningPathId: true }).extend({
     .nullable(),
 });
 
+export const GetTasksStatsSchema = z.object({
+  open: z.number(),
+  todo: z.number(),
+  inProgress: z.number(),
+  done: z.number(),
+  overdue: z.number(),
+  dueToday: z.number(),
+  doneThisWeek: z.number(),
+
+  byPriority: z.record(z.string(), z.number()),
+
+  perProject: z.array(
+    z.object({
+      done: z.number(),
+      progress: z.number(),
+      total: z.number(),
+      projectId: z.string(),
+    }),
+  ),
+});
+
 export type Task = z.infer<typeof GetTaskSchema>;
 
 export const CreateAndEditTaskSchema = TaskSchema.pick({
@@ -66,3 +99,4 @@ export const CreateAndEditTaskSchema = TaskSchema.pick({
 
 export type CreateTaskInput = z.infer<typeof CreateTaskSchema>;
 export type CreateAndEditTaskInput = z.infer<typeof CreateAndEditTaskSchema>;
+export type GetTasksStats = z.infer<typeof GetTasksStatsSchema>;
