@@ -6,8 +6,10 @@ import {
   deleteTask,
   getTasks,
   getTaskByUserId,
+  getTasksStats,
 } from "../services/taskManagementServices";
 import { CreateTaskInput, Task } from "../types/task.schema";
+import { Scope, scopeToQuery } from "../lib/url";
 
 const taskKeys = {
   all: ["tasks"] as const,
@@ -76,5 +78,13 @@ export const useUpdateTask = (options?: {
       );
       options?.onSettled?.();
     },
+  });
+};
+
+export const useGetTasksStats = (scope: Scope) => {
+  const scopeQuery = scopeToQuery(scope);
+  return useQuery({
+    queryKey: ["tasks-stats", scopeQuery],
+    queryFn: () => getTasksStats(scopeQuery),
   });
 };
