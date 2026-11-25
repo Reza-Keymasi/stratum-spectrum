@@ -29,7 +29,7 @@ const ViewNavigation = ({ scope, view }: ViewNavigationProps) => {
           href={`${scopeHref(scope, v)}${queryString ? `?${queryString}` : ""}`}
           className={cn(
             "flex items-center gap-1 text-xs font-semibold p-2 rounded-sm",
-            v === view ? "bg-white" : "text-gray-500",
+            v === view ? "text-white bg-green-accent-500" : "text-gray-500",
           )}
           aria-selected={v === view}
         >
