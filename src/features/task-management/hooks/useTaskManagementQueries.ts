@@ -1,14 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import {
-  updateTask,
   createTask,
   deleteTask,
   getTasks,
   getTaskByUserId,
   getTasksStats,
+  getTaskById,
 } from "../services/taskManagementServices";
-import { CreateTaskInput, Task } from "../types/task.schema";
+import { CreateTaskInput } from "../types/task.schema";
 import { Scope, scopeToQuery } from "../lib/url";
 
 const taskKeys = {
@@ -31,6 +31,13 @@ export const useGetTaskByUserId = (userId: string) => {
   });
 };
 
+export const useGetTaskById = (id: string) => {
+  return useQuery({
+    queryKey: ["tasks", id],
+    queryFn: () => getTaskById(id),
+  });
+};
+
 export const useCreateTask = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -44,40 +51,6 @@ export const useDeleteTask = () => {
   return useMutation({
     mutationFn: (id: string) => deleteTask(id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
-  });
-};
-
-export const useUpdateTask = (options?: {
-  onMutate?: (variables: {
-    id: string;
-    payload: Partial<Task>;
-  }) => Promise<any> | any;
-  onError?: (err: any, variables: any, context: any) => void;
-  onSettled?: () => void;
-  extraInvalidationKeys?: string[][];
-}) => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ id, payload }: { id: string; payload: Partial<Task> }) =>
-      updateTask({ id, payload }),
-
-    onMutate: options?.onMutate,
-    onError: options?.onError,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
-      queryClient.invalidateQueries({ queryKey: ["learning-path"] });
-      options?.extraInvalidationKeys?.forEach((key) =>
-        queryClient.invalidateQueries({ queryKey: key }),
-      );
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
-      queryClient.invalidateQueries({ queryKey: ["learning-path"] });
-      options?.extraInvalidationKeys?.forEach((key) =>
-        queryClient.invalidateQueries({ queryKey: key }),
-      );
-      options?.onSettled?.();
-    },
   });
 };
 
