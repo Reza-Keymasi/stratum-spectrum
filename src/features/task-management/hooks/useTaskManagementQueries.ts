@@ -7,6 +7,8 @@ import {
   getTaskByUserId,
   getTasksStats,
   getTaskById,
+  getProjects,
+  getLabels,
 } from "../services/taskManagementServices";
 import { CreateTaskInput } from "../types/task.schema";
 import { Scope, scopeToQuery } from "../lib/url";
@@ -35,6 +37,20 @@ export const useGetTaskById = (id: string) => {
   return useQuery({
     queryKey: ["tasks", id],
     queryFn: () => getTaskById(id),
+  });
+};
+
+export const useGetProjects = () => {
+  return useQuery({
+    queryKey: ["tasks", "projects"],
+    queryFn: getProjects,
+  });
+};
+
+export const useGetLabels = () => {
+  return useQuery({
+    queryKey: ["tasks", "labels"],
+    queryFn: getLabels,
   });
 };
 
