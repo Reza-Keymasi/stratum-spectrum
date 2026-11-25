@@ -7,6 +7,39 @@ import { UpdateTaskSchema } from "@/features/task-management/types/task.schema";
 import { requireAuth } from "@/features/auth/lib/session";
 import { Label } from "@/shared/lib/models/label.model";
 
+export async function GET(
+  _: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const { userId } = await requireAuth();
+  if (!userId) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  const { id } = await params;
+  if (!Types.ObjectId.isValid(id))
+    return NextResponse.json({ message: "Invalid id" }, { status: 400 });
+
+  try {
+    await connectToDB();
+
+    const task = await Task.findOne({ _id: id, userId }).populate(
+      "labels",
+      "name color _id",
+    );
+
+    if (!task)
+      return NextResponse.json({ message: "Task not found" }, { status: 404 });
+
+    return NextResponse.json(task, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 },
+    );
+  }
+}
+
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
