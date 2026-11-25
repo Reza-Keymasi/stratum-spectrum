@@ -1,7 +1,11 @@
 import { z } from "zod";
 
-export const TaskStatusEnum = z.enum(["todo", "in_progress", "review", "done"]);
-export const TaskPriorityEnum = z.enum(["low", "medium", "high"]);
+export const TaskStatuses = ["todo", "in_progress", "review", "done"] as const;
+
+export const TaskPriorities = ["low", "medium", "high"] as const;
+
+export const TaskStatusEnum = z.enum(TaskStatuses);
+export const TaskPriorityEnum = z.enum(TaskPriorities);
 export const TaskCategoryEnum = z.enum(["planning", "learning", "personal"]);
 
 export const StatsKeys = [
@@ -30,26 +34,60 @@ export const CreateTaskSchema = z
     project: z.string().optional(),
     priority: TaskPriorityEnum.optional(),
     status: TaskStatusEnum.optional(),
+    notes: z.string().optional(),
+    starred: z.boolean().default(false).optional(),
+    boardPosition: z.number().default(0).optional(),
     dueDate: z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/)
       .optional(),
-    estimateMinutes: z.number().int().positive().optional(),
     labels: z.array(z.string().trim().toLowerCase().min(1).max(30)).default([]),
   })
   .extend({ learningPathId: z.string().optional().nullable() });
 
+export const ProjectSchema = z.object({
+  _id: z.string(),
+  userId: z.string(),
+  name: z.string(),
+  color: z.string(),
+  position: z.number(),
+  archived: z.boolean(),
+});
+
+export const LabelSchema = z.object({
+  _id: z.string(),
+  userId: z.string(),
+  name: z.string(),
+  color: z.string(),
+});
+
 export const TaskSchema = z.object({
   _id: z.string(),
+  userId: z.string(),
+  project: z.string(),
   title: z.string(),
-  description: z.string(),
+  notes: z.string(),
   status: TaskStatusEnum,
   priority: TaskPriorityEnum,
-  category: TaskCategoryEnum,
-  dueDate: z.number().int().positive().optional(),
-  steps: z.array(
+  PrevStatus: TaskStatusEnum,
+  estimateMinutes: z.number().optional().nullable(),
+  starred: z.boolean(),
+  labels: z.array(
     z.object({
-      text: z.string(),
+      userId: z.string(),
+      name: z.string(),
+      color: z.string(),
+    }),
+  ),
+  dueDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .nullable()
+    .optional(),
+  boardPosition: z.number(),
+  subTasks: z.array(
+    z.object({
+      title: z.string(),
       done: z.boolean(),
     }),
   ),
@@ -87,16 +125,31 @@ export const GetTasksStatsSchema = z.object({
   ),
 });
 
+export const UpdateTaskSchema = z
+  .object({
+    title: z.string().trim().min(1).max(300),
+    notes: z.string().max(10000),
+    status: TaskStatusEnum,
+    priority: TaskPriorityEnum,
+    estimateMinutes: z.number().int().min(1).max(1440).nullable(),
+    project: z.string(),
+    done: z.boolean(),
+    prevStatus: TaskStatusEnum,
+    dueDate: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .nullable(),
+    // labels: z.array(z.string()),
+    labels: z.array(z.string().trim().toLowerCase().min(1).max(30)).max(20),
+    starred: z.boolean(),
+  })
+  .partial()
+  .strict();
+
 export type Task = z.infer<typeof GetTaskSchema>;
 
-export const CreateAndEditTaskSchema = TaskSchema.pick({
-  title: true,
-  description: true,
-  category: true,
-  priority: true,
-  dueDate: true,
-}).extend({ learningPathId: z.string().optional().nullable() });
-
 export type CreateTaskInput = z.infer<typeof CreateTaskSchema>;
-export type CreateAndEditTaskInput = z.infer<typeof CreateAndEditTaskSchema>;
 export type GetTasksStats = z.infer<typeof GetTasksStatsSchema>;
+export type UpdateTaskInput = z.infer<typeof UpdateTaskSchema>;
+export type GetProjects = z.infer<typeof ProjectSchema>;
+export type GetLabel = z.infer<typeof LabelSchema>;
