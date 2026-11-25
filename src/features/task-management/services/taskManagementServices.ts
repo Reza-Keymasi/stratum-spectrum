@@ -1,8 +1,10 @@
 import { fetchHandler } from "@/shared/lib/fetchHandler";
 import {
+  CreateSubTaskInput,
   CreateTaskInput,
   GetLabel,
   GetProjects,
+  GetSubTask,
   GetTasksStats,
   Task,
   UpdateTaskInput,
@@ -33,6 +35,19 @@ export const getTaskById = (id: string) => {
 
 export const createTask = (input: CreateTaskInput) => {
   return axiosApiClient.post(`${BASE_URL}`, input);
+};
+
+export const createSubTask = (
+  id: string,
+  title: string,
+): Promise<GetSubTask> => {
+  const response = axiosApiClient
+    .post(`${BASE_URL}/${id}/subtasks`, {
+      title,
+    })
+    .then((data) => data.data);
+
+  return response;
 };
 
 export const deleteTask = (id: string) => {
