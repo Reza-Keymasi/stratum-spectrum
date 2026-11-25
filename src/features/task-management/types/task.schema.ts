@@ -74,7 +74,7 @@ export const TaskSchema = z.object({
   starred: z.boolean(),
   labels: z.array(
     z.object({
-      userId: z.string(),
+      _id: z.string(),
       name: z.string(),
       color: z.string(),
     }),
