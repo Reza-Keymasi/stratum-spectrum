@@ -6,6 +6,7 @@ import { SignUpSchema } from "@/features/auth/types/auth.schema";
 import { generateAccessToken } from "@/features/auth/lib/generateTokens";
 import { createRefreshToken } from "@/features/auth/services/tokenServices";
 import { setRefreshTokenCookie } from "@/shared/lib/cookieUtils";
+import { Project } from "@/shared/lib/models/project.model";
 
 export async function POST(req: Request) {
   try {
@@ -38,6 +39,11 @@ export async function POST(req: Request) {
       email,
       role: newUser.role,
     };
+
+    (await Project.insertMany(["Inbox", "Personal"])).map((name) => ({
+      userId: newUser._id,
+      name,
+    }));
 
     const accessToken = generateAccessToken(payload);
     const refreshToken = await createRefreshToken(newUser._id, {
