@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import {
+  updateTask,
   createTask,
   deleteTask,
   getTasks,
@@ -10,7 +11,7 @@ import {
   getProjects,
   getLabels,
 } from "../services/taskManagementServices";
-import { CreateTaskInput } from "../types/task.schema";
+import { CreateTaskInput, Task, UpdateTaskInput } from "../types/task.schema";
 import { Scope, scopeToQuery } from "../lib/url";
 
 const taskKeys = {
@@ -67,6 +68,57 @@ export const useDeleteTask = () => {
   return useMutation({
     mutationFn: (id: string) => deleteTask(id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
+  });
+};
+
+export const useUpdateTask = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: UpdateTaskInput }) =>
+      updateTask({ id, payload }),
+
+    onMutate: async ({ id, payload }) => {
+      await queryClient.cancelQueries({ queryKey: taskKeys.detail(id) });
+      const prev = queryClient.getQueryData<Task>(taskKeys.detail(id));
+      queryClient.setQueryData<Task>(taskKeys.detail(id), (old) => {
+        if (!old) return old;
+        const { labels, done, ...rest } = payload;
+        const status =
+          done === undefined
+            ? rest.status
+            : done
+              ? "done"
+              : (old.PrevStatus ?? "todo");
+
+        return {
+          ...old,
+          ...rest,
+          ...(status && { status }),
+          ...(labels && {
+            labels: labels.map(
+              (name) =>
+                old.labels.find((l) => l.name === name) ?? {
+                  _id: name,
+                  name,
+                  color: "#64748b",
+                },
+            ),
+          }),
+        };
+      });
+      return { prev };
+    },
+
+    onError: (error, { id }, ctx) => {
+      if (ctx?.prev) queryClient.setQueryData(taskKeys.detail(id), ctx.prev);
+    },
+
+    onSettled: (data, error, { id }) => {
+      (queryClient.invalidateQueries({ queryKey: ["tasks", id] }),
+        queryClient.invalidateQueries({ queryKey: ["tasks", "list"] }),
+        queryClient.invalidateQueries({ queryKey: ["tasks", "tasks-stats"] }));
+      // queryClient.invalidateQueries({queryKey:[]}),
+    },
   });
 };
 
