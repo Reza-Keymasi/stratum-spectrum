@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 
 export const toDateString = (d: Date) => format(d, "yyyy-MM-dd");
 
@@ -7,6 +7,9 @@ export const formatDateString = (s: string) => {
   const [y, m, d] = s.split("-").map(Number);
   return new Date(y, m - 1, d);
 };
+
+export const fromDateOnly = (s?: string | null) =>
+  s ? parseISO(s) : undefined;
 
 export const today = () => toDateString(new Date());
 
