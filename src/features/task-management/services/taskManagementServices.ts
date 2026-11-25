@@ -1,6 +1,8 @@
 import { fetchHandler } from "@/shared/lib/fetchHandler";
 import {
   CreateTaskInput,
+  GetLabel,
+  GetProjects,
   GetTasksStats,
   Task,
   UpdateTaskInput,
@@ -54,6 +56,22 @@ export const updateTask = ({
 export const getTasksStats = (scopeQuery: string): Promise<GetTasksStats> => {
   const response = axiosApiClient
     .get<GetTasksStats>(`${BASE_URL}/stats?${scopeQuery}`)
+    .then((data) => data.data);
+
+  return response;
+};
+
+export const getProjects = (): Promise<GetProjects[]> => {
+  const response = axiosApiClient
+    .get<GetProjects[]>(`${BASE_URL}/projects`)
+    .then((data) => data.data);
+
+  return response;
+};
+
+export const getLabels = () => {
+  const response = axiosApiClient
+    .get<GetLabel[]>(`${BASE_URL}/labels`)
     .then((data) => data.data);
 
   return response;
