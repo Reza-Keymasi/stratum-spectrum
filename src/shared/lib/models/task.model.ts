@@ -30,6 +30,7 @@ interface Task {
   notes: string;
   priority: Priority;
   status: Status;
+  prevStatus: Status;
   dueDate: string;
   estimateMinutes: number;
   subTasks: SubTask[];
@@ -78,6 +79,7 @@ const TaskSchema = new Schema(
       enum: STATUSES,
       default: "todo",
     },
+    prevStatus: { type: String, enum: STATUSES, default: null },
     priority: {
       type: String,
       enum: PRIORITIES,
@@ -96,6 +98,7 @@ const TaskSchema = new Schema(
         "A task can have at most 100 subtasks",
       ],
     },
+    starred: { type: Boolean, default: false },
     boardPosition: { type: Number, default: 0 },
     learningPath: {
       type: Schema.Types.ObjectId,
