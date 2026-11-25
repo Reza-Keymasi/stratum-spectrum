@@ -61,6 +61,24 @@ export const LabelSchema = z.object({
   color: z.string(),
 });
 
+export const SubTaskSchema = z.object({
+  _id: z.string(),
+  title: z.string(),
+  done: z.boolean(),
+});
+
+export const CreateSubTaskSchema = z.object({
+  title: z.string().trim().min(1).max(300),
+});
+
+export const UpdateSubTaskSchema = z
+  .object({
+    title: z.string().trim().min(1).max(300),
+    done: z.boolean(),
+  })
+  .partial()
+  .strict();
+
 export const TaskSchema = z.object({
   _id: z.string(),
   userId: z.string(),
@@ -85,12 +103,7 @@ export const TaskSchema = z.object({
     .nullable()
     .optional(),
   boardPosition: z.number(),
-  subTasks: z.array(
-    z.object({
-      title: z.string(),
-      done: z.boolean(),
-    }),
-  ),
+  subTasks: z.array(SubTaskSchema),
   learningPathId: z.string().optional().nullable(),
 });
 
@@ -149,7 +162,14 @@ export const UpdateTaskSchema = z
 export type Task = z.infer<typeof GetTaskSchema>;
 
 export type CreateTaskInput = z.infer<typeof CreateTaskSchema>;
-export type GetTasksStats = z.infer<typeof GetTasksStatsSchema>;
 export type UpdateTaskInput = z.infer<typeof UpdateTaskSchema>;
+
+export type GetTasksStats = z.infer<typeof GetTasksStatsSchema>;
+
 export type GetProjects = z.infer<typeof ProjectSchema>;
+
 export type GetLabel = z.infer<typeof LabelSchema>;
+
+export type CreateSubTaskInput = z.infer<typeof CreateSubTaskSchema>;
+export type GetSubTask = z.infer<typeof SubTaskSchema>;
+export type UpdateSubTaskInput = z.infer<typeof UpdateSubTaskSchema>;
