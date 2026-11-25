@@ -1,7 +1,10 @@
-import { z } from "zod";
-
 import { fetchHandler } from "@/shared/lib/fetchHandler";
-import { CreateTaskInput, GetTasksStats, Task } from "../types/task.schema";
+import {
+  CreateTaskInput,
+  GetTasksStats,
+  Task,
+  UpdateTaskInput,
+} from "../types/task.schema";
 import { axiosApiClient } from "@/features/auth/lib/axiosApiClient";
 
 const BASE_URL = "/tasks";
@@ -18,11 +21,16 @@ export const getTaskByUserId = async (userId: string) => {
   return await fetchHandler<Task[]>(`${BASE_URL}/${userId}`);
 };
 
+export const getTaskById = (id: string) => {
+  const response = axiosApiClient
+    .get<Task>(`${BASE_URL}/${id}`)
+    .then((data) => data.data);
+
+  return response;
+};
+
 export const createTask = (input: CreateTaskInput) => {
-  return fetchHandler<Task>(BASE_URL, {
-    method: "POST",
-    body: JSON.stringify(input),
-  });
+  return axiosApiClient.post(`${BASE_URL}`, input);
 };
 
 export const deleteTask = (id: string) => {
@@ -36,12 +44,11 @@ export const updateTask = ({
   payload,
 }: {
   id: string;
-  payload: Partial<Task>;
+  payload: UpdateTaskInput;
 }) => {
-  return fetchHandler<Task>(`${BASE_URL}/${id}`, {
-    method: "PATCH",
-    body: JSON.stringify(payload),
-  });
+  return axiosApiClient
+    .patch<Task>(`${BASE_URL}/${id}`, payload)
+    .then((data) => data.data);
 };
 
 export const getTasksStats = (scopeQuery: string): Promise<GetTasksStats> => {
