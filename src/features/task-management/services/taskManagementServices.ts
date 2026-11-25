@@ -50,6 +50,14 @@ export const createSubTask = (
   return response;
 };
 
+export const deleteSubTask = (id: string, subId: string) => {
+  const response = axiosApiClient
+    .delete(`${BASE_URL}/${id}/subtasks/${subId}`)
+    .then((data) => data.data);
+
+  return response;
+};
+
 export const deleteTask = (id: string) => {
   return fetchHandler<void>(`${BASE_URL}/${id}`, {
     method: "DELETE",
