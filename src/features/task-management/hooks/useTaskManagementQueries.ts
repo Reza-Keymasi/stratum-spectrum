@@ -10,9 +10,13 @@ import {
   getTaskById,
   getProjects,
   getLabels,
+  createSubTask,
+  deleteSubTask,
+  updateSubTask,
 } from "../services/taskManagementServices";
 import { CreateTaskInput, Task, UpdateTaskInput } from "../types/task.schema";
 import { Scope, scopeToQuery } from "../lib/url";
+import { title } from "process";
 
 const taskKeys = {
   all: ["tasks"] as const,
@@ -61,6 +65,33 @@ export const useCreateTask = () => {
     mutationFn: (input: CreateTaskInput) => createTask(input),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
   });
+};
+
+export const useSubTasks = (id: string) => {
+  const queryClient = useQueryClient();
+
+  const add = useMutation({
+    mutationFn: (title: string) => createSubTask(id, title),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks", id] }),
+  });
+
+  const update = useMutation({
+    mutationFn: ({
+      subId,
+      payload,
+    }: {
+      subId: string;
+      payload: { title?: string; done?: boolean };
+    }) => updateSubTask(id, subId, payload),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks", id] }),
+  });
+
+  const remove = useMutation({
+    mutationFn: (subId: string) => deleteSubTask(id, subId),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks", id] }),
+  });
+
+  return { add, update, remove };
 };
 
 export const useDeleteTask = () => {
