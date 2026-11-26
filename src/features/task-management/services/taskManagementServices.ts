@@ -50,6 +50,18 @@ export const createSubTask = (
   return response;
 };
 
+export const updateSubTask = (
+  id: string,
+  subId: string,
+  payload: { title?: string; done?: boolean },
+) => {
+  const response = axiosApiClient
+    .patch(`${BASE_URL}/${id}/subtasks/${subId}`, payload)
+    .then((data) => data.data);
+
+  return response;
+};
+
 export const deleteSubTask = (id: string, subId: string) => {
   const response = axiosApiClient
     .delete(`${BASE_URL}/${id}/subtasks/${subId}`)
