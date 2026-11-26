@@ -8,12 +8,14 @@ import { Input } from "@/components/ui/input";
 interface EditableInputProps {
   value: string;
   onCommit: (value: string) => void;
+  disabled?: boolean;
   className?: string;
 }
 
 const EditableInput = ({
   value,
   onCommit,
+  disabled = false,
   className = "",
 }: EditableInputProps) => {
   const [draft, setDraft] = useState(value);
@@ -41,6 +43,7 @@ const EditableInput = ({
     <Input
       value={draft}
       onChange={(e) => setDraft(e.target.value)}
+      disabled={disabled}
       onBlur={handleCommit}
       onKeyDown={handleKeyDown}
       className={cn(
