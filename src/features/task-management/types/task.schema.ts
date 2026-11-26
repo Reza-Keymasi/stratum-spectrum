@@ -104,6 +104,7 @@ export const TaskSchema = z.object({
     .optional(),
   boardPosition: z.number(),
   subTasks: z.array(SubTaskSchema),
+  createdAt: z.date(),
   learningPathId: z.string().optional().nullable(),
 });
 
