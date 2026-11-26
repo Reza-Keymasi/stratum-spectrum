@@ -2,21 +2,13 @@ import CreateTaskInput from "./CreateTaskInput";
 import ViewNavigation from "./ViewNavigation";
 import { Filters, Scope, View } from "../lib/url";
 import TasksView from "./views/TasksView";
+import { formattedDate } from "@/lib/date";
 
 interface TaskScreenProps {
   scope: Scope;
   view: View;
   filters?: Filters;
 }
-
-const formattedDate = () => {
-  return new Intl.DateTimeFormat("en-US", {
-    day: "2-digit",
-    month: "long",
-    weekday: "long",
-    timeZone: "UTC",
-  }).format(new Date());
-};
 
 const TaskScreen = async ({ scope, view, filters }: TaskScreenProps) => {
   return (

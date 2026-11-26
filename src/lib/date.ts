@@ -13,6 +13,16 @@ export const fromDateOnly = (s?: string | null) =>
 
 export const today = () => toDateString(new Date());
 
+export const formattedDate = (date?: Date) => {
+  const dateValue = date === undefined ? new Date() : new Date(date);
+  return new Intl.DateTimeFormat("en-US", {
+    day: "2-digit",
+    month: "long",
+    weekday: "long",
+    timeZone: "UTC",
+  }).format(dateValue);
+};
+
 export const dayToUTCDate = (s: string) => new Date(`${s}T00:00:00.000z`);
 
 export const monthRange = (year: number, month: number) => ({
